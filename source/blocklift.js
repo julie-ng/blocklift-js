@@ -136,8 +136,8 @@ async function _listBlobs (container, blobService) {
 	const containerClient = blobService.getContainerClient(container)
 	const iter = await containerClient.listBlobsFlat()
 
-  for await (const b of iter) {
-    blobs.push(b)
+	for await (const b of iter) {
+		blobs.push(b)
 	}
 
 	return blobs

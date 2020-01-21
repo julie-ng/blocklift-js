@@ -1,0 +1,6 @@
+docs/
+demo/dist/
+build/
+dist/
+coverage/
+dev.js
