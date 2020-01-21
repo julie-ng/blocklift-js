@@ -2,7 +2,7 @@
   "name": "blocklist-js",
   "version": "0.1.0",
   "author": "Julie Ng",
-  "description": "A dead simple and developer friendly JavaScript library for handline object storage on Azure",
+  "description": "A dead simple and developer friendly JavaScript library for handling object storage on Azure",
   "keywords": [
     "azure",
     "blob",
