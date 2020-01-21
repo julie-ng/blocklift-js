@@ -1,0 +1,7 @@
+*.env
+*.log
+*.spec.js
+coverage/
+docs/
+integration/
+mocks/

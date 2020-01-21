@@ -1,0 +1,9 @@
+docs/
+coverage/
+node_modules/
+.env
+.DS_Store
+*.tmp
+*.log
+dev.js
+schema.md

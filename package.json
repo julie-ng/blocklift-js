@@ -1,0 +1,26 @@
+{
+  "name": "blocklist-js",
+  "version": "0.1.0",
+  "author": "Julie Ng",
+  "description": "A dead simple and developer friendly JavaScript library for handline object storage on Azure",
+  "keywords": [
+    "azure",
+    "blob",
+    "storage",
+    "blob-storage",
+    "uploads"
+  ],
+  "main": "source/blocklift.js",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon -w source/ -w dev.js --exec 'node dev.js'"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@azure/storage-blob": "^12.0.2"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.2"
+  }
+}
