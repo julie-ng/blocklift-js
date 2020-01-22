@@ -1,4 +1,4 @@
-class Error {
+class ClientError {
 	constructor (err) {
 		// console.log(err)
 
@@ -24,4 +24,4 @@ const friendly = {
 	default: 'Miscellanous error. Debug server response for details.'
 }
 
-module.exports = Error
+module.exports = ClientError

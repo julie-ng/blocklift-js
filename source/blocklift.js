@@ -1,7 +1,6 @@
-const BlobServiceClient = require("@azure/storage-blob").BlobServiceClient
-const StorageSharedKeyCredential = require("@azure/storage-blob").StorageSharedKeyCredential
+const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storage-blob')
 
-const Error = require('./error')
+const ClientError = require('./client-error')
 
 /**
  * Blocklift
@@ -51,7 +50,8 @@ class Blocklift {
 					serverResponse: res
 				}
 			})
-			.catch((err) => { throw new Error(err) })
+			// .catch((err) => { throw err })
+			.catch((err) => { throw new ClientError(err) })
 	}
 
 	/**
@@ -70,13 +70,13 @@ class Blocklift {
 					serverResponse: res
 				}
 			})
-			.catch((err) => { throw new Error(err) })
+			.catch((err) => { throw new ClientError(err) })
 	}
 
 	listContainers () {
 		return _listContainers(this.blobService)
 			.then((res) => res)
-			.catch((err) => { throw new Error(err) })
+			.catch((err) => { throw new ClientError(err) })
 	}
 
 	// -------- Blobs --------
@@ -91,7 +91,7 @@ class Blocklift {
 	listBlobs (containerName) {
 		return _listBlobs(containerName, this.blobService)
 			.then((res) => res)
-			.catch((err) => { throw new Error(err) })
+			.catch((err) => { throw new ClientError(err) })
 	}
 
 	/**
