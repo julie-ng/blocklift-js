@@ -16,9 +16,12 @@
     "dev": "nodemon -w source/ -w dev.js --exec 'node dev.js'",
     "test:unit": "jest source --verbose",
     "test:unit:watch": "nodemon -w ./source --exec 'npm run test:unit'",
+    "test:integration": "node integration/integration.spec.js",
+    "test:integration:watch": "NODE_ENV=development nodemon -w source -w integration --exec 'node integration/integration.spec.js'",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "lint:watch": "nodemon -w source --exec 'npm run lint'"
+    "lint:watch": "nodemon -w source --exec 'npm run lint'",
+    "preflight": "npm run lint && npm run test:unit && NODE_ENV=development npm run test:integration && npm audit"
   },
   "license": "MIT",
   "dependencies": {
