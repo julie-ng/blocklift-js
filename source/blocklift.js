@@ -1,5 +1,4 @@
-const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storage-blob')
-
+const AzureSDK = require('./azure-sdk')
 const ClientError = require('./client-error')
 
 /**
@@ -20,12 +19,8 @@ class Blocklift {
 		this.account = opts.account
 		this.accountUrl = `https://${opts.account}.blob.core.windows.net`
 
-		const sharedKeyCredential = new StorageSharedKeyCredential(opts.account, opts.accessKey)
 
-		this.blobService = new BlobServiceClient(
-			this.accountUrl,
-			sharedKeyCredential
-		)
+		this.sdk = new AzureSDK(opts)
 	}
 
 	// -------- Containers --------
@@ -41,7 +36,7 @@ class Blocklift {
 			throw `Error: invalid container name. Please use all lowercase letters`
 		}
 
-		return _createContainer(name, this.blobService)
+		return this.sdk.createContainer(name)
 			.then((res) => {
 				return {
 					name: name,
@@ -50,7 +45,6 @@ class Blocklift {
 					serverResponse: res
 				}
 			})
-			// .catch((err) => { throw err })
 			.catch((err) => { throw new ClientError(err) })
 	}
 
@@ -61,7 +55,7 @@ class Blocklift {
 	 * @returns {Promise}
 	 */
 	deleteContainer (name) {
-		return _deleteContainer(name, this.blobService)
+		return this.sdk.deleteContainer(name)
 			.then((res) => {
 				return {
 					name: name,
@@ -74,7 +68,7 @@ class Blocklift {
 	}
 
 	listContainers () {
-		return _listContainers(this.blobService)
+		return this.sdk.listContainers()
 			.then((res) => res)
 			.catch((err) => { throw new ClientError(err) })
 	}
@@ -89,7 +83,7 @@ class Blocklift {
 	 * @return {Promise<Object>} Error
 	 */
 	listBlobs (containerName) {
-		return _listBlobs(containerName, this.blobService)
+		return this.sdk.listBlobs(containerName)
 			.then((res) => res)
 			.catch((err) => { throw new ClientError(err) })
 	}
@@ -98,49 +92,12 @@ class Blocklift {
 	 * Upload Blob File
 	 *
 	 * @param {String} file - path to file
-	 * @param {String} [params.container]
+	 * @param {String} [params.container] - container to use
 	 * @param {String} params.destination - without container name
-	 * @param {*} [params.data]
 	 */
 	uploadFile (source, params = {}) {
+
 	}
-}
-
-// ---- Prefer Promises to Iterators ----
-
-async function _createContainer (name, blobService) {
-	return await blobService
-		.getContainerClient(name)
-		.create()
-}
-
-async function _deleteContainer (name, blobService) {
-	return await blobService
-		.getContainerClient(name)
-		.delete()
-}
-
-async function _listContainers (blobService) {
-	const containers = []
-	const iter = blobService.listContainers()
-
-	for await (const c of iter) {
-		containers.push(c)
-	}
-
-	return containers
-}
-
-async function _listBlobs (container, blobService) {
-	const blobs = []
-	const containerClient = blobService.getContainerClient(container)
-	const iter = await containerClient.listBlobsFlat()
-
-	for await (const b of iter) {
-		blobs.push(b)
-	}
-
-	return blobs
 }
 
 module.exports = Blocklift
