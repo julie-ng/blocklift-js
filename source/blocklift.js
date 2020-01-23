@@ -131,7 +131,7 @@ class Blocklift {
 			})
 	}
 
-	getBlobUrl (pathname, container = '' ) {
+	getBlobUrl (pathname, container = '') {
 		container = (container === '')
 			? this.defaultContainer
 			: container
