@@ -2,6 +2,7 @@ const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storag
 
 /**
  * Abstracts all the chaining required to use Azure SDK
+ * and converts iterables to standard objects
  */
 class AzureSDK {
 	constructor (opts = {}) {
@@ -16,6 +17,8 @@ class AzureSDK {
 			sharedKeyCredential
 		)
 	}
+
+	// ---- Containers ----
 
 	async createContainer (name) {
 		return await this.service
@@ -40,6 +43,8 @@ class AzureSDK {
 		return containers
 	}
 
+	// ---- Blobs ----
+
 	async listBlobs (container) {
 		const blobs = []
 		const containerClient = this.service.getContainerClient(container)
@@ -50,6 +55,25 @@ class AzureSDK {
 		}
 
 		return blobs
+	}
+
+	/**
+	 * Uploads Raw Content
+	 * Todo: add options
+	 *
+	 * @param {String} opts.container
+	 * @param {String} opts.pathname - path name for blob without container prefix
+	 * @param {String} opts.content
+	 */
+	async upload (opts = {}) {
+		const container = opts.container || ''
+		const pathname = opts.pathname || ''
+		const content = opts.content || ''
+
+		return this.service
+			.getContainerClient(container)
+			.getBlockBlobClient(pathname)
+			.upload(content, content.length)
 	}
 }
 
