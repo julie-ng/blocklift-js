@@ -59,7 +59,7 @@ class AzureSDK {
 
 	/**
 	 * Uploads Raw Content
-	 * Todo: add options
+	 * Todo: add options, e.g. parallel upload block size
 	 *
 	 * @param {String} opts.container
 	 * @param {String} opts.pathname - path name for blob without container prefix
@@ -74,6 +74,21 @@ class AzureSDK {
 			.getContainerClient(container)
 			.getBlockBlobClient(pathname)
 			.upload(content, content.length)
+	}
+
+	/**
+	 * Uploads file
+	 * Todo: add options, e.g. parallel upload block size
+	 *
+	 * @param {String} opts.container
+	 * @param {String} opts.filePathname - pathname of of source file
+	 * @param {String} opts.blobPathname - pathname for destination blob without container prefix
+	 */
+	async uploadFile (opts = {}) {
+		return this.service
+			.getContainerClient(opts.container)
+			.getBlockBlobClient(opts.blobPathname)
+			.uploadFile(opts.filePathname)
 	}
 }
 

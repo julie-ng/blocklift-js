@@ -90,16 +90,6 @@ class Blocklift {
 	}
 
 	/**
-	 * Upload Blob File
-	 *
-	 * @param {String} file - path to file
-	 * @param {String} [params.container] - container to use
-	 * @param {String} params.destination - without container name
-	 */
-	uploadFile (source, params = {}) {
-
-	}
-	/**
 	 * Upload content
 	 * at the moment not recommended because it does not include headers
 	 * for example content-type
@@ -123,6 +113,31 @@ class Blocklift {
 			.then((res) => {
 				return {
 					url: this.getBlobUrl(pathname, container),
+					serverReponse: res
+				}
+			})
+			.catch((err) => {
+				throw new ClientError(err)
+			})
+	}
+
+	/**
+	 *
+	 * @param {String} sourcePath - source file pathname
+	 * @param {String} blobPath - desintation file pathname on Azure
+	 * @param {Object} [opts = {}]
+	 */
+	uploadFile (sourcePath, blobPath, opts = {}) {
+		const container = opts.container || this.defaultContainer
+		const uploadOpts = {
+			container: container,
+			filePathname: sourcePath,
+			blobPathname: blobPath
+		}
+		return this.sdk.uploadFile(uploadOpts)
+			.then((res) => {
+				return {
+					url: this.getBlobUrl(blobPath, container),
 					serverReponse: res
 				}
 			})
