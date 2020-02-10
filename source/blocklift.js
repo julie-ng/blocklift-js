@@ -1,5 +1,6 @@
 const AzureSDK = require('./azure-sdk')
 const ClientError = require('./client-error')
+const util = require('./util')
 
 /**
  * Blocklift
@@ -17,8 +18,9 @@ class Blocklift {
 	 */
 	constructor (opts = {}) {
 		this.account = opts.account
-		this.accountUrl = `https://${opts.account}.blob.core.windows.net`
+		this.host = `https://${opts.account}.blob.core.windows.net`
 
+		this.defaultContainer = opts.defaultContainer || null
 
 		this.sdk = new AzureSDK(opts)
 	}
@@ -89,15 +91,78 @@ class Blocklift {
 	}
 
 	/**
-	 * Upload Blob File
+	 * Upload content
+	 * at the moment not recommended because it does not include headers
+	 * for example content-type
 	 *
-	 * @param {String} file - path to file
-	 * @param {String} [params.container] - container to use
-	 * @param {String} params.destination - without container name
+	 * @param {String} pathname
+	 * @param {String} content
+	 * @param {*} [opts={}]
 	 */
-	uploadFile (source, params = {}) {
+	async upload (pathname, content, opts = {}) {
+		if (!pathname) {
+			throw 'Error: missing required Blob `pathname` parameter, e.g. `foo.txt` or `foo/bar.txt`'
+		}
+		const container = opts.container || this.defaultContainer
+		const requiredParams = {
+			container: container,
+			pathname: pathname,
+			content: content
+		}
+		// const contentType = await FileType(content)
+		// console.log('contentType', contentType)
 
+
+		return this.sdk.upload(requiredParams, opts)
+			.then((res) => {
+				return {
+					url: this.getBlobUrl(pathname, container),
+					serverReponse: res
+				}
+			})
+			.catch((err) => {
+				throw new ClientError(err)
+			})
+	}
+
+	/**
+	 *
+	 * @param {String} sourcePath - source file pathname
+	 * @param {String} blobPath - desintation file pathname on Azure
+	 * @param {Object} [opts = {}]
+	 */
+	async uploadFile (sourcePath, blobPath, opts = {}) {
+		const container = opts.container || this.defaultContainer
+		const contentType = await util.getContentTypeFromFile(sourcePath)
+		const requiredParams = {
+			container: container,
+			filePathname: sourcePath,
+			blobPathname: blobPath,
+		}
+		opts = {
+			...opts,
+			contentType: contentType
+		}
+
+		return this.sdk.uploadFile(requiredParams, opts)
+			.then((res) => {
+				return {
+					url: this.getBlobUrl(blobPath, container),
+					serverReponse: res
+				}
+			})
+			.catch((err) => {
+				throw new ClientError(err)
+			})
+	}
+
+	getBlobUrl (pathname, container = '') {
+		container = (container === '')
+			? this.defaultContainer
+			: container
+		return this.host + `/${container}/${pathname}`
 	}
 }
+
 
 module.exports = Blocklift

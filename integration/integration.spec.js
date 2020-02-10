@@ -1,30 +1,65 @@
+const path = require('path')
+const chalk = require('chalk')
+const Blocklift = require('../source/blocklift')
+
+// -- setup --
+
 if (process.env.NODE_ENV === 'development') {
 	require('dotenv').config()
 }
 
-const Blocklift = require('../source/blocklift')
-
 const ACCOUNT = process.env.BLOB_ACCOUNT_NAME
 const ACCESS_KEY = process.env.BLOB_ACCOUNT_KEY
 
+if (ACCOUNT === undefined || ACCESS_KEY === undefined) {
+	console.log('Error: make sure both `BLOB_ACCOUNT_NAME` and `BLOB_ACCOUNT_KEY` environment variables are set.')
+	process.exit(1)
+}
+
+const TEXT_FILE = '../test/hello.txt'
+const IMAGE_FILE = '../test/image.png'
+
+const lift = new Blocklift({
+	account: ACCOUNT,
+	accessKey: ACCESS_KEY,
+	defaultContainer: 'dev' // must already exist
+})
+
+// -- Integration (quick and dirty) --
+
 async function run () {
 	const runId = 'b-' + new Date().getMilliseconds() // Date.now()
-	const lift = new Blocklift({
-		account: ACCOUNT,
-		accessKey: ACCESS_KEY
-	})
 
 	try {
-		console.log(`--- Blocklift.js Integration, Run #${runId} ---`)
+		console.log('')
+		console.log(chalk.underline(`Blocklift.js Integration (run #${runId})`))
+		console.log('')
+
+		// containers
+
+		const containersList = await lift.listContainers()
+		logSuccess('list Containers: ', containersList.length)
 
 		const created = await lift.createContainer(runId)
-		console.log('Created Container:', created)
+		logSuccess('created Container `' + created.name + '`')
 
 		const deleted = await lift.deleteContainer(runId)
-		console.log('Deleted Container:', deleted)
+		logSuccess('deleted Container `' + deleted.name + '`')
+
+		// blobs
 
 		const blobs = await lift.listBlobs('tests')
-		console.log('Listing Blobs:', blobs)
+		logSuccess('listing Blobs:', blobs.length)
+
+		const newblobPathname = 'newblob-' + new Date().getTime() + '.txt'
+		const upload1 = await lift.upload(newblobPathname, 'Hello World', { contentType: 'text/plain' })
+		logSuccess(`uploaded 'Hello World' text to`, upload1.url)
+
+
+		await uploadFile(TEXT_FILE, 'local/hello-' + new Date().getTime() + '.txt')
+		await uploadFile(IMAGE_FILE, 'local/image-' + new Date().getTime() + '.png')
+
+		console.log('')
 	} catch (e) {
 		console.log('[ERROR] runId:' + runId)
 		console.error(e)
@@ -33,3 +68,15 @@ async function run () {
 }
 
 run()
+
+// -- Helpers ---
+
+async function uploadFile (sourceFilename, destFilename) {
+	const pathname = path.join(__dirname, sourceFilename)
+	const upload = await lift.uploadFile(pathname, destFilename)
+	logSuccess(`uploaded '` + sourceFilename + `' file to`, upload.url)
+}
+
+function logSuccess (...params) {
+	console.log(chalk.green('✔'), ...params)
+}
