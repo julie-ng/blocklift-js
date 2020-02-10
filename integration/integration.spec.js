@@ -101,7 +101,7 @@ describe (`Integration Specs`, () => {
 function _runId (prefix = '') {
 	const d = new Date()
 	return prefix
-	  + d.toISOString().slice(0, 10)
+		+ d.toISOString().slice(0, 10)
 		+ '-'
 		+ d.getHours()
 		+ d.getMinutes()
