@@ -16,17 +16,19 @@ if (ACCOUNT === undefined || ACCESS_KEY === undefined) {
 	process.exit(1)
 }
 
-const TEST_FILE = '../test/hello.txt'
+const TEXT_FILE = '../test/hello.txt'
+const IMAGE_FILE = '../test/image.png'
+
+const lift = new Blocklift({
+	account: ACCOUNT,
+	accessKey: ACCESS_KEY,
+	defaultContainer: 'dev' // must already exist
+})
 
 // -- Integration (quick and dirty) --
 
 async function run () {
 	const runId = 'b-' + new Date().getMilliseconds() // Date.now()
-	const lift = new Blocklift({
-		account: ACCOUNT,
-		accessKey: ACCESS_KEY,
-		defaultContainer: 'dev' // must already exist
-	})
 
 	try {
 		console.log('')
@@ -50,13 +52,12 @@ async function run () {
 		logSuccess('listing Blobs:', blobs.length)
 
 		const newblobPathname = 'newblob-' + new Date().getTime() + '.txt'
-		const upload1 = await lift.upload(newblobPathname, 'Hello World')
+		const upload1 = await lift.upload(newblobPathname, 'Hello World', { contentType: 'text/plain' })
 		logSuccess(`uploaded 'Hello World' text to`, upload1.url)
 
-		const testFilepath = path.join(__dirname, TEST_FILE)
-		const destPath = 'local/hello-' + new Date().getTime() + '.txt'
-		const upload2 = await lift.uploadFile(testFilepath, destPath)
-		logSuccess(`uploaded '` + TEST_FILE + `' file to`, upload2.url)
+
+		await uploadFile(TEXT_FILE, 'local/hello-' + new Date().getTime() + '.txt')
+		await uploadFile(IMAGE_FILE, 'local/image-' + new Date().getTime() + '.png')
 
 		console.log('')
 	} catch (e) {
@@ -69,6 +70,12 @@ async function run () {
 run()
 
 // -- Helpers ---
+
+async function uploadFile (sourceFilename, destFilename) {
+	const pathname = path.join(__dirname, sourceFilename)
+	const upload = await lift.uploadFile(pathname, destFilename)
+	logSuccess(`uploaded '` + sourceFilename + `' file to`, upload.url)
+}
 
 function logSuccess(...params) {
 	console.log(chalk.green('✔'), ...params)

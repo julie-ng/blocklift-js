@@ -61,34 +61,47 @@ class AzureSDK {
 	 * Uploads Raw Content
 	 * Todo: add options, e.g. parallel upload block size
 	 *
-	 * @param {String} opts.container
-	 * @param {String} opts.pathname - path name for blob without container prefix
-	 * @param {String} opts.content
+	 * @param {String} params.container
+	 * @param {String} params.pathname - path name for blob without container prefix
+	 * @param {String} params.content
+	 * @param {String} [opts.contentType] - content type
 	 */
-	async upload (opts = {}) {
-		const container = opts.container || ''
-		const pathname = opts.pathname || ''
-		const content = opts.content || ''
-
+	upload (params, opts = {}) {
+		let blobOpts = {}
+		if (opts.contentType) {
+			blobOpts.blobHTTPHeaders = {
+				blobContentType: opts.contentType
+			}
+		}
 		return this.service
-			.getContainerClient(container)
-			.getBlockBlobClient(pathname)
-			.upload(content, content.length)
+			.getContainerClient(params.container)
+			.getBlockBlobClient(params.pathname)
+			.upload(params.content, params.content.length, blobOpts)
 	}
 
 	/**
 	 * Uploads file
 	 * Todo: add options, e.g. parallel upload block size
+	 * For more blob upload options see
+	 * https://azuresdkdocs.blob.core.windows.net/$web/javascript/azure-storage-blob/12.0.2/interfaces/blobhttpheaders.html#blobcontenttype
 	 *
-	 * @param {String} opts.container
-	 * @param {String} opts.filePathname - pathname of of source file
-	 * @param {String} opts.blobPathname - pathname for destination blob without container prefix
+	 * @param {String} params.container
+	 * @param {String} params.filePathname - pathname of of source file
+	 * @param {String} params.blobPathname - pathname for destination blob without container prefix
+	 * @param {String} [opts.contentType] - content type
 	 */
-	async uploadFile (opts = {}) {
+	async uploadFile (params, opts = {}) {
+		let blobOpts = {}
+		if (opts.contentType) {
+			blobOpts.blobHTTPHeaders = {
+				blobContentType: opts.contentType
+			}
+		}
+
 		return this.service
-			.getContainerClient(opts.container)
-			.getBlockBlobClient(opts.blobPathname)
-			.uploadFile(opts.filePathname)
+			.getContainerClient(params.container)
+			.getBlockBlobClient(params.blobPathname)
+			.uploadFile(params.filePathname, blobOpts)
 	}
 }
 

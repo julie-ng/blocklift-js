@@ -1,5 +1,7 @@
+const FileType = require('file-type')
 const AzureSDK = require('./azure-sdk')
 const ClientError = require('./client-error')
+const util = require('./util')
 
 /**
  * Blocklift
@@ -98,18 +100,21 @@ class Blocklift {
 	 * @param {String} content
 	 * @param {*} [opts={}]
 	 */
-	upload (pathname, content, opts = {}) {
+	async upload (pathname, content, opts = {}) {
 		if (!pathname) {
 			throw 'Error: missing required Blob `pathname` parameter, e.g. `foo.txt` or `foo/bar.txt`'
 		}
 		const container = opts.container || this.defaultContainer
-		const uploadOpts = {
+		const requiredParams = {
 			container: container,
 			pathname: pathname,
 			content: content
 		}
+		// const contentType = await FileType(content)
+		// console.log('contentType', contentType)
 
-		return this.sdk.upload(uploadOpts)
+
+		return this.sdk.upload(requiredParams, opts)
 			.then((res) => {
 				return {
 					url: this.getBlobUrl(pathname, container),
@@ -127,14 +132,20 @@ class Blocklift {
 	 * @param {String} blobPath - desintation file pathname on Azure
 	 * @param {Object} [opts = {}]
 	 */
-	uploadFile (sourcePath, blobPath, opts = {}) {
+	async uploadFile (sourcePath, blobPath, opts = {}) {
 		const container = opts.container || this.defaultContainer
-		const uploadOpts = {
+		const contentType = await util.getContentTypeFromFile(sourcePath)
+		const requiredParams = {
 			container: container,
 			filePathname: sourcePath,
-			blobPathname: blobPath
+			blobPathname: blobPath,
 		}
-		return this.sdk.uploadFile(uploadOpts)
+		opts = {
+			...opts,
+			contentType: contentType
+		}
+
+		return this.sdk.uploadFile(requiredParams, opts)
 			.then((res) => {
 				return {
 					url: this.getBlobUrl(blobPath, container),
@@ -153,5 +164,6 @@ class Blocklift {
 		return this.host + `/${container}/${pathname}`
 	}
 }
+
 
 module.exports = Blocklift
