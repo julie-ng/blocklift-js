@@ -77,6 +77,6 @@ async function uploadFile (sourceFilename, destFilename) {
 	logSuccess(`uploaded '` + sourceFilename + `' file to`, upload.url)
 }
 
-function logSuccess(...params) {
+function logSuccess (...params) {
 	console.log(chalk.green('✔'), ...params)
 }
