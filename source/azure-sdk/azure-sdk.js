@@ -1,4 +1,5 @@
 const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storage-blob')
+const BlobUploadOptions = require('./blob-upload-options')
 
 /**
  * Abstracts all the chaining required to use Azure SDK
@@ -67,12 +68,8 @@ class AzureSDK {
 	 * @param {String} [opts.contentType] - content type
 	 */
 	upload (params, opts = {}) {
-		let blobOpts = {}
-		if (opts.contentType) {
-			blobOpts.blobHTTPHeaders = {
-				blobContentType: opts.contentType
-			}
-		}
+		const blobOpts = new BlobUploadOptions(opts)
+
 		return this.service
 			.getContainerClient(params.container)
 			.getBlockBlobClient(params.pathname)
@@ -91,12 +88,7 @@ class AzureSDK {
 	 * @param {String} [opts.contentType] - content type
 	 */
 	async uploadFile (params, opts = {}) {
-		let blobOpts = {}
-		if (opts.contentType) {
-			blobOpts.blobHTTPHeaders = {
-				blobContentType: opts.contentType
-			}
-		}
+		const blobOpts = new BlobUploadOptions(opts)
 
 		return this.service
 			.getContainerClient(params.container)
