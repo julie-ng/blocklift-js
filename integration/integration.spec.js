@@ -28,7 +28,7 @@ const lift = new Blocklift({
 // -- Integration (quick and dirty) --
 
 async function run () {
-	const runId = 'b-' + new Date().getMilliseconds() // Date.now()
+	const runId = 'run-' + new Date().getMilliseconds() // Date.now()
 
 	try {
 		console.log('')
@@ -47,19 +47,30 @@ async function run () {
 		logSuccess('deleted Container `' + deleted.name + '`')
 
 		// blobs
-
 		const blobs = await lift.listBlobs('tests')
 		logSuccess('listing Blobs:', blobs.length)
 
-		const newblobPathname = 'newblob-' + new Date().getTime() + '.txt'
+		const newblobPathname = 'local/newblob-' + new Date().getTime() + '.txt'
 		const upload1 = await lift.upload(newblobPathname, 'Hello World', { contentType: 'text/plain' })
 		logSuccess(`uploaded 'Hello World' text to`, upload1.url)
 
 
-		await uploadFile(TEXT_FILE, 'local/hello-' + new Date().getTime() + '.txt')
-		await uploadFile(IMAGE_FILE, 'local/image-' + new Date().getTime() + '.png')
+		await uploadFile(TEXT_FILE, `local/hello-${runId}.txt`)
+		await uploadFile(IMAGE_FILE, `local/image-${runId}.png`)
+
+		// const files = [
+		// 	newblobPathname,
+		// 	`local/hello-${runId}.txt`,
+		// 	`local/image-${runId}.png`
+		// ]
+		// await deleteFiles(files)
+
+		await lift.deleteFile(newblobPathname)
+		await lift.deleteFile(`local/hello-${runId}.txt`)
+		await lift.deleteFile(`local/image-${runId}.png`)
 
 		console.log('')
+
 	} catch (e) {
 		console.log('[ERROR] runId:' + runId)
 		console.error(e)
@@ -76,6 +87,13 @@ async function uploadFile (sourceFilename, destFilename) {
 	const upload = await lift.uploadFile(pathname, destFilename)
 	logSuccess(`uploaded '` + sourceFilename + `' file to`, upload.url)
 }
+
+// async function deleteFiles (filesArray) {
+// 	filesArray.forEach(async (f) => {
+// 		const d = await lift.deleteFile(f)
+// 		logSuccess(`deleted ${f}`)
+// 	})
+// }
 
 function logSuccess (...params) {
 	console.log(chalk.green('✔'), ...params)
