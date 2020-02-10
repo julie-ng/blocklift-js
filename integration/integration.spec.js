@@ -1,5 +1,5 @@
+const axios = require('axios')
 const path = require('path')
-const chalk = require('chalk')
 const Blocklift = require('../source/blocklift')
 
 // -- setup --
@@ -16,85 +16,94 @@ if (ACCOUNT === undefined || ACCESS_KEY === undefined) {
 	process.exit(1)
 }
 
-const TEXT_FILE = '../test/hello.txt'
-const IMAGE_FILE = '../test/image.png'
+// -- Integration Tests --
 
-const lift = new Blocklift({
-	account: ACCOUNT,
-	accessKey: ACCESS_KEY,
-	defaultContainer: 'dev' // must already exist
+describe (`Integration Specs`, () => {
+
+	const runId = _runId()
+	const lift = new Blocklift({
+		account: ACCOUNT,
+		accessKey: ACCESS_KEY,
+		defaultContainer: 'dev' // must already exist
+	})
+
+	describe ('Containers', () => {
+
+		it ('lists containers', async () => {
+			const list = await lift.listContainers()
+			const containers = []
+			list.forEach((c) => containers.push(c.name))
+			console.log('containers: ', containers)
+			expect(list.length).toBeGreaterThan(0)
+		})
+
+		it ('creates a container', async () => {
+			const name = 'container-' + runId
+			const created = await lift.createContainer(name)
+			expect(created.name).toEqual(name)
+		})
+	})
+
+	describe ('Blobs', () => {
+		it ('can list blobs', async () => {
+			const blobs = await lift.listBlobs('dev')
+			expect(blobs.length).toBeGreaterThan(1)
+		})
+
+		it ('can upload content', async () => {
+			const newblobPathname = `newblob-${runId}.txt`
+			const upload = await lift.upload(newblobPathname, 'Hello World', { contentType: 'text/plain' })
+			console.log(upload.url)
+			expect(upload.url).not.toEqual('')
+		})
+
+		it ('can upload an image', async () => {
+			const pathname = path.join(__dirname, '../test/image.png')
+			const upload = await lift.uploadFile(pathname, `image-${runId}.png`)
+			console.log(upload.url)
+			expect(upload.url).not.toEqual('')
+
+			const res = await axios.get(upload.url)
+			expect(res.headers['content-type']).toEqual('image/png')
+		})
+
+		it ('can upload a text file', async () => {
+			const pathname = path.join(__dirname, '../test/hello.txt')
+			const upload = await lift.uploadFile(pathname, `hello-${runId}.txt`)
+			console.log(upload.url)
+			expect(upload.url).not.toEqual('')
+
+			const res = await axios.get(upload.url)
+			expect(res.headers['content-type']).toEqual('text/plain')
+		})
+	})
+
+	describe ('Delete (clean up)', () => {
+		it ('can delete containers', async () => {
+			const name = 'container-' + runId
+			const deleted = await lift.deleteContainer(name)
+			expect(deleted.name).toEqual(name)
+		})
+
+		it ('can delete blobs', async () => {
+			let del1 = await lift.deleteFile(`newblob-${runId}.txt`)
+			expect(del1.errorCode).toBe(undefined)
+
+			const del2 = await lift.deleteFile(`hello-${runId}.txt`)
+			expect(del2.errorCode).toBe(undefined)
+
+			const del3 = await lift.deleteFile(`image-${runId}.png`)
+			expect(del3.errorCode).toBe(undefined)
+		})
+	})
 })
 
-// -- Integration (quick and dirty) --
-
-async function run () {
-	const runId = 'run-' + new Date().getMilliseconds() // Date.now()
-
-	try {
-		console.log('')
-		console.log(chalk.underline(`Blocklift.js Integration (run #${runId})`))
-		console.log('')
-
-		// containers
-
-		const containersList = await lift.listContainers()
-		logSuccess('list Containers: ', containersList.length)
-
-		const created = await lift.createContainer(runId)
-		logSuccess('created Container `' + created.name + '`')
-
-		const deleted = await lift.deleteContainer(runId)
-		logSuccess('deleted Container `' + deleted.name + '`')
-
-		// blobs
-		const blobs = await lift.listBlobs('tests')
-		logSuccess('listing Blobs:', blobs.length)
-
-		const newblobPathname = 'local/newblob-' + new Date().getTime() + '.txt'
-		const upload1 = await lift.upload(newblobPathname, 'Hello World', { contentType: 'text/plain' })
-		logSuccess(`uploaded 'Hello World' text to`, upload1.url)
-
-
-		await uploadFile(TEXT_FILE, `local/hello-${runId}.txt`)
-		await uploadFile(IMAGE_FILE, `local/image-${runId}.png`)
-
-		// const files = [
-		// 	newblobPathname,
-		// 	`local/hello-${runId}.txt`,
-		// 	`local/image-${runId}.png`
-		// ]
-		// await deleteFiles(files)
-
-		await lift.deleteFile(newblobPathname)
-		await lift.deleteFile(`local/hello-${runId}.txt`)
-		await lift.deleteFile(`local/image-${runId}.png`)
-
-		console.log('')
-
-	} catch (e) {
-		console.log('[ERROR] runId:' + runId)
-		console.error(e)
-		process.exit(1)
-	}
-}
-
-run()
-
-// -- Helpers ---
-
-async function uploadFile (sourceFilename, destFilename) {
-	const pathname = path.join(__dirname, sourceFilename)
-	const upload = await lift.uploadFile(pathname, destFilename)
-	logSuccess(`uploaded '` + sourceFilename + `' file to`, upload.url)
-}
-
-// async function deleteFiles (filesArray) {
-// 	filesArray.forEach(async (f) => {
-// 		const d = await lift.deleteFile(f)
-// 		logSuccess(`deleted ${f}`)
-// 	})
-// }
-
-function logSuccess (...params) {
-	console.log(chalk.green('✔'), ...params)
+function _runId (prefix = '') {
+	const d = new Date()
+	return prefix
+	  + d.toISOString().slice(0, 10)
+		+ '-'
+		+ d.getHours()
+		+ d.getMinutes()
+		+ d.getSeconds()
 }

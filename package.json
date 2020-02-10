@@ -16,8 +16,8 @@
     "dev": "nodemon -w source/ -w dev.js --exec 'node dev.js'",
     "test:unit": "jest source --verbose",
     "test:unit:watch": "nodemon -w ./source --exec 'npm run test:unit'",
-    "test:integration": "node integration/integration.spec.js",
-    "test:integration:watch": "NODE_ENV=development nodemon -w source -w integration --exec 'node integration/integration.spec.js'",
+    "test:integration": "jest --coverage false integration/*",
+    "test:integration:watch": "NODE_ENV=development nodemon -w integration -w source --exec 'npm run test:integration'",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "lint:watch": "nodemon -w source --exec 'npm run lint'",
@@ -31,6 +31,7 @@
     "is-binary-path": "^2.1.0"
   },
   "devDependencies": {
+    "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "eslint": "^6.8.0",
     "jest": "^24.9.0",
