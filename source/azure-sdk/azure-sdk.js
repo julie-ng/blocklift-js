@@ -78,6 +78,7 @@ class AzureSDK {
 
 	/**
 	 * Uploads file
+	 *
 	 * Todo: add options, e.g. parallel upload block size
 	 * For more blob upload options see
 	 * https://azuresdkdocs.blob.core.windows.net/$web/javascript/azure-storage-blob/12.0.2/interfaces/blobhttpheaders.html#blobcontenttype
@@ -94,6 +95,19 @@ class AzureSDK {
 			.getContainerClient(params.container)
 			.getBlockBlobClient(params.blobPathname)
 			.uploadFile(params.filePathname, blobOpts)
+	}
+
+	/**
+	 * Delete a blob
+	 *
+	 * @param {String} params.container
+	 * @param {String} params.blobPathname - pathname for destination blob without container prefix
+	 */
+	async deleteFile (params, opts = {}) {
+		return this.service
+			.getContainerClient(params.container)
+			.getBlockBlobClient(params.pathname)
+			.delete()
 	}
 }
 
