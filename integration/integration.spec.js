@@ -10,6 +10,9 @@ if (process.env.NODE_ENV === 'development') {
 
 const ACCOUNT = process.env.BLOB_ACCOUNT_NAME
 const ACCESS_KEY = process.env.BLOB_ACCOUNT_KEY
+const DEFAULT_CONTAINER = 'integration'
+const CONSTANT_CONTAINER = 'constant'
+const CONSTANT_CONTAINER_COUNT = 2
 
 if (ACCOUNT === undefined || ACCESS_KEY === undefined) {
 	console.log('Error: make sure both `BLOB_ACCOUNT_NAME` and `BLOB_ACCOUNT_KEY` environment variables are set.')
@@ -24,7 +27,7 @@ describe (`Integration Specs`, () => {
 	const lift = new Blocklift({
 		account: ACCOUNT,
 		accessKey: ACCESS_KEY,
-		defaultContainer: 'dev' // must already exist
+		defaultContainer: DEFAULT_CONTAINER // must already exist
 	})
 
 	describe ('Containers', () => {
@@ -46,8 +49,8 @@ describe (`Integration Specs`, () => {
 
 	describe ('Blobs', () => {
 		it ('can list blobs', async () => {
-			const blobs = await lift.listBlobs('dev')
-			expect(blobs.length).toBeGreaterThan(1)
+			const blobs = await lift.listBlobs(CONSTANT_CONTAINER)
+			expect(blobs.length).toEqual(CONSTANT_CONTAINER_COUNT)
 		})
 
 		it ('can upload content', async () => {
@@ -105,5 +108,5 @@ function _runId (prefix = '') {
 		+ '-'
 		+ d.getHours()
 		+ d.getMinutes()
-		+ d.getSeconds()
+		+ '-' + Math.random().toString(36).substring(7)
 }
