@@ -1,4 +1,3 @@
-const FileType = require('file-type')
 const AzureSDK = require('./azure-sdk')
 const ClientError = require('./client-error')
 const util = require('./util')

@@ -1,3 +1,5 @@
+const util = require('../util')
+
 const VALID_HTTP_HEADERS = [
 	'cacheControl',
 	'contentDisposition',
@@ -17,15 +19,11 @@ class BlobHeaders {
 	constructor (opts = {}) {
 		Object.keys(opts).forEach((k) => {
 			if (VALID_HTTP_HEADERS.includes(k) && opts[k] !== '') {
-				const key = 'blob' + _capitalize(k)
+				const key = 'blob' + util.capitalize(k)
 				this[key] = opts[k]
 			}
 		})
 	}
-}
-
-function _capitalize (str) {
-	return str[0].toUpperCase() + str.slice(1)
 }
 
 module.exports = BlobHeaders

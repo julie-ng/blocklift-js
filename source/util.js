@@ -30,8 +30,12 @@ async function _getContentTypeFromFile (filepath) {
 	return type
 }
 
+function _capitalize (str) {
+	return str[0].toUpperCase() + str.slice(1)
+}
 
 module.exports = {
+	capitalize: _capitalize,
 	getContentTypeFromFile: _getContentTypeFromFile,
 	getFilename: _getFilename,
 	getFileExtension: _getFileExtension
