@@ -8,16 +8,13 @@ if (process.env.NODE_ENV === 'development') {
 	require('dotenv').config()
 }
 
-const ACCOUNT = process.env.BLOB_ACCOUNT_NAME
-const ACCESS_KEY = process.env.BLOB_ACCOUNT_KEY
-const DEFAULT_CONTAINER = 'integration'
-const CONSTANT_CONTAINER = 'constant'
-const CONSTANT_CONTAINER_COUNT = 2
-
-if (ACCOUNT === undefined || ACCESS_KEY === undefined) {
-	console.log('Error: make sure both `BLOB_ACCOUNT_NAME` and `BLOB_ACCOUNT_KEY` environment variables are set.')
-	process.exit(1)
-}
+const env = _setEnvVars([
+	'BLOB_ACCOUNT_NAME',
+	'BLOB_ACCOUNT_KEY',
+	'BLOB_DEFAULT_CONTAINER',
+	'BLOB_LIST_CONTAINER',
+	'BLOB_LIST_CONTAINER_COUNT'
+])
 
 // -- Integration Tests --
 
@@ -25,9 +22,9 @@ describe (`Integration Specs`, () => {
 
 	const runId = _runId()
 	const lift = new Blocklift({
-		account: ACCOUNT,
-		accessKey: ACCESS_KEY,
-		defaultContainer: DEFAULT_CONTAINER // must already exist
+		account: env.BLOB_ACCOUNT_NAME,
+		accessKey: env.BLOB_ACCOUNT_KEY,
+		defaultContainer: env.BLOB_DEFAULT_CONTAINER // must already exist
 	})
 
 	describe ('Containers', () => {
@@ -49,8 +46,8 @@ describe (`Integration Specs`, () => {
 
 	describe ('Blobs', () => {
 		it ('can list blobs', async () => {
-			const blobs = await lift.listBlobs(CONSTANT_CONTAINER)
-			expect(blobs.length).toEqual(CONSTANT_CONTAINER_COUNT)
+			const blobs = await lift.listBlobs(env.BLOB_LIST_CONTAINER)
+			expect(blobs.length).toEqual(env.BLOB_LIST_CONTAINER_COUNT*1)
 		})
 
 		it ('can upload content', async () => {
@@ -109,4 +106,25 @@ function _runId (prefix = '') {
 		+ d.getHours()
 		+ d.getMinutes()
 		+ '-' + Math.random().toString(36).substring(7)
+}
+
+function _setEnvVars (names) {
+	let hasError = false
+	const missing = []
+	const vars = {}
+
+	names.forEach((v) => {
+		if (process.env[v] === undefined) {
+			missing.push(v)
+			hasError = true
+		} else {
+			vars[v] = process.env[v]
+		}
+	})
+
+	if (hasError) {
+		throw `Missing environment variables:\n- ${missing.join('\n- ')}`
+	}
+
+	return vars
 }
