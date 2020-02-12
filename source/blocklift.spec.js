@@ -97,6 +97,18 @@ describe ('Blocklift.js', () => {
 			})
 		})
 
+		describe ('upload()', () => {
+			pending ('it calls `upload` on SDK')
+		})
+
+		describe ('uploadFile()', () => {
+			pending ('it calls `uploadFile` on SDK')
+		})
+
+		describe ('deleteFile()', () => {
+			pending ('it calls `delete` on SDK')
+		})
+
 		describe ('getBlobUrl()', () => {
 			it ('can specify container as param', () => {
 				expect(lift.getBlobUrl('hello.txt', 'container'))
