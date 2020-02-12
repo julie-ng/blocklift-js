@@ -10,7 +10,7 @@ describe ('Blocklift.js', () => {
 	let stubIterable
 
 	beforeEach(() => {
-		lift = new Blocklift()
+		lift = new Blocklift({ account: 'spec' })
 		serviceClient = BlobServiceClient.mock.instances[0]
 		stubIterable = specHelpers.iterableStub()
 	})
@@ -94,6 +94,26 @@ describe ('Blocklift.js', () => {
 				expect(listBlobsSpy).toHaveBeenCalledTimes(1)
 				expect(Array.isArray(blobs)).toBe(true)
 				expect(blobs).not.toEqual(stubIterable)
+			})
+		})
+
+		describe ('getBlobUrl()', () => {
+			it ('can specify container as param', () => {
+				expect(lift.getBlobUrl('hello.txt', 'container'))
+					.toEqual('https://spec.blob.core.windows.net/container/hello.txt')
+
+				expect(lift.getBlobUrl('with-subfolder/hello.txt', 'container'))
+					.toEqual('https://spec.blob.core.windows.net/container/with-subfolder/hello.txt')
+			})
+
+			it ('can use default container', () => {
+				let mylift = new Blocklift({
+					account: 'test',
+					defaultContainer: 'default-container'
+				})
+				let url = mylift.getBlobUrl('foo/bar.jpg')
+
+				expect(url).toEqual('https://test.blob.core.windows.net/default-container/foo/bar.jpg')
 			})
 		})
 	})
