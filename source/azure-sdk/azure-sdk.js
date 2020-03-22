@@ -66,8 +66,9 @@ class AzureSDK {
 	 * @param {String} params.pathname - path name for blob without container prefix
 	 * @param {String} params.content
 	 * @param {String} [opts.contentType] - content type
+	 * @return {Promise}
 	 */
-	upload (params, opts = {}) {
+	async upload (params, opts = {}) {
 		const blobOpts = new BlobUploadOptions(opts)
 
 		return this.service
