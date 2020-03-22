@@ -14,10 +14,11 @@
 		"excludePattern": "(^|\\/|\\\\)_"
 	},
 	"opts": {
-		"template": "./node_modules/tidy-jsdoc",
+		"template": "./../tidy-jsdoc",
 		"encoding": "utf8",
 		"destination": "./docs/",
-		"recurse": true
+		"recurse": true,
+		"prism-theme": "prism-tomorrow-night"
 	},
 	"plugins": [
 		"plugins/markdown",
@@ -25,7 +26,15 @@
 	],
   "styles": {
     "text-color": "#111",
-    "subheading-color": "#111"
+		"subheading-color": "#111",
+		"nav-width": "280px",
+		"nav-bg-color": "#0078D4",
+		"nav-link-color": "#fff",
+		"nav-heading-color": "#eee",
+		"nav-text-color": "#ccc",
+		"nav-title-color": "#fff",
+		"nav-title-align": "left",
+		"nav-title-size": "2em"
   },
 	"templates": {
 		"cleverLinks": false,
