@@ -16,7 +16,7 @@
     "dev": "nodemon -w source/ -w dev.js --exec 'node dev.js'",
     "docs": "jsdoc --readme ./README.md -c jsdoc.json",
     "docs:dev": "concurrently --kill-others 'npm:docs:watch' 'npm:docs:server'",
-    "docs:watch": "nodemon -w source -w ./../tidy-jsdoc --exec 'npm run docs -- -p'",
+    "docs:watch": "nodemon -w source -w ./../tidy-jsdoc -e js,css,tmpl,md --exec 'npm run docs -- -p'",
     "docs:server": "live-server docs",
     "test:all": "jest --verbose **/*.spec.js",
     "test:all:dev": "NODE_ENV=development jest --verbose **/*.spec.js",
