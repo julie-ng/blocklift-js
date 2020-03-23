@@ -18,7 +18,7 @@
 		"encoding": "utf8",
 		"destination": "./docs/",
 		"recurse": true,
-		"prism-theme": "prism-tomorrow-night"
+		"prism-theme": "prism-okaidia"
 	},
 	"plugins": [
 		"plugins/markdown",
@@ -34,7 +34,11 @@
 		"nav-text-color": "#ccc",
 		"nav-title-color": "#fff",
 		"nav-title-align": "left",
-		"nav-title-size": "2em"
+		"nav-title-size": "2em",
+		"nav-title-margin-bottom": "1em",
+		"nav-list-margin-left": "0",
+		"nav-heading-display": "none",
+		"member-name-signature-display": "none"
   },
 	"templates": {
 		"cleverLinks": false,
