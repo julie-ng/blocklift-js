@@ -2,7 +2,6 @@ const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storag
 const BlobUploadOptions = require('./blob-upload-options')
 
 /**
- * **NOTE: this class is documented here, but meant for _internal_ use only.**
  *
  * Abstracts all the chaining required to use Azure SDK
  * and converts iterables to standard objects. For example,
@@ -22,19 +21,41 @@ const BlobUploadOptions = require('./blob-upload-options')
  *   .getBlockBlobClient('destination.png')
  *   .uploadFile('local-file.png')
  * ```
- * @private
- * @prop {String} opts.account - blob storage accout name
  */
 class AzureSDK {
-	constructor (opts = {}) {
-		this.account = opts.account
-		this.accountUrl = `https://${opts.account}.blob.core.windows.net`
 
+	/**
+	 *
+	 * @param {Object} opts
+	 * @param {String} opts.account
+	 */
+	constructor (opts = {}) {
 		const sharedKeyCredential = new StorageSharedKeyCredential(opts.account, opts.accessKey)
 
-		// this.defaultContainer = opts.defaultContainer || null
+		/**
+		 * Azure Storage Account name for reference
+		 *
+		 * @readonly
+		 * @type {String}
+		 */
+		this.account = opts.account
+
+		/**
+		 * Default container name, used if no container is specified when calling the API
+		 *
+		 * @readonly
+		 * @type {String|null}
+		 */
+		this.defaultContainer = opts.defaultContainer || null
+
+		/**
+		 * Reference to [Blob Service Client from Azure SDK](https://azuresdkdocs.blob.core.windows.net/$web/javascript/azure-storage-blob/12.0.2/classes/blobserviceclient.html)
+		 *
+		 * @readonly
+		 * @type {BlobServiceClient}
+		 */
 		this.service = new BlobServiceClient(
-			this.accountUrl,
+			`https://${opts.account}.blob.core.windows.net`,
 			sharedKeyCredential
 		)
 	}
@@ -42,8 +63,8 @@ class AzureSDK {
 	// ---- Containers ----
 
 	/**
-	 * @param {String} name - container name
-	 * @return {Promise}
+	 * @param {String} name - name of container to create
+	 * @returns {Promise}
 	 */
 	async createContainer (name) {
 		return await this.service
@@ -52,8 +73,8 @@ class AzureSDK {
 	}
 
 	/**
-	 * @param {String} name - container name
-	 * @return {Promise}
+	 * @param {String} name - name of container to delete
+	 * @returns {Promise}
 	 */
 	async deleteContainer (name) {
 		return await this.service
@@ -62,7 +83,8 @@ class AzureSDK {
 	}
 
 	/**
-	 * @return {Promise}
+	 * @returns {Promise<Array>} list of containers
+	 * @returns {Promise<Object>} Error
 	 */
 	async listContainers () {
 		const containers = []
@@ -136,8 +158,6 @@ class AzureSDK {
 	}
 
 	/**
-	 * Delete a blob
-	 *
 	 * @param {String} params.container - container name
 	 * @param {String} params.blobPathname - pathname for destination blob without container prefix
 	 * @return {Promise}

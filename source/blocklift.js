@@ -3,8 +3,6 @@ const ClientError = require('./client-error')
 const util = require('./util')
 
 /**
- * Blocklift
- *
  * ## Syntax of your choice: `async`/`await` or `Promise`
  *
  * Blocklift.js is designed dead simple and will accept either syntax of your choice.
@@ -42,32 +40,54 @@ const util = require('./util')
  *
  * The Azure SDK leverages the REST API and server responses are generally passed through to Blocklift. In some cases, the responses are extended to include some handy properities, e.g. URL of uploaded blob.
  *
- * @property {AzureSDK} sdk - SDK wrapper to avoid excessive chaining
- * @property {String} host e.g. `https://myaccount.blob.core.windows.net`
- * @property {String} account Azure Storage Account name
+ *
  */
 class Blocklift {
 
 	/**
-	 * Constructor
+	 * Creates a new Blocklift client for Azure Storage for blobs (binary large objects).
 	 *
-	 * ```javascript
+	 * @param {String} opts.account - Blob Storage Account name
+	 * @param {String} opts.accessKey - Blob Storage Account Access Key
+ 	 * @example
    * const lift = new Blocklift({
    *   account: 'your account name',
    *   accessKey: 'your access key',
    *   defaultContainer: 'your-default-container' // must already exist
    * })
-	 * ```
-	 *
-	 * @param {String} opts.account - Blob Storage Account name
-	 * @param {String} opts.accessKey - Blob Storage Account Access Key
 	 */
 	constructor (opts = {}) {
+
+		/**
+		 * Storage Account Name
+		 *
+		 * @readonly
+		 * @type {String} account [Azure Storage Account name](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview#naming-storage-accounts) e.g. `mystorageaccount`
+		 */
 		this.account = opts.account
+
+		/**
+		 * Hostname for Azure Storage Account
+		 *
+		 * @readonly
+		 * @type {String} host e.g. `https://myaccount.blob.core.windows.net`
+		 */
 		this.host = `https://${opts.account}.blob.core.windows.net`
 
+		/**
+		 * Name of default container for blobs, used if container is not specified in API calls.
+		 *
+		 * @readonly
+		 * @type {String|Object}
+		 */
 		this.defaultContainer = opts.defaultContainer || null
 
+		/**
+		 * Reference to AzureSDK Wrapper
+		 *
+		 * @readonly
+		 * @type {AzureSDK}
+		 */
 		this.sdk = new AzureSDK(opts)
 	}
 
@@ -127,8 +147,8 @@ class Blocklift {
 	/**
 	 * List Containers
 	 *
-	 * @return {Promise<Array>} list of containers
-	 * @return {Promise<Object>} Error
+	 * @returns {Promise<Array>} list of containers
+	 * @returns {Promise<Object>} Error
 	 * @example
 	 * lift.listContainers()
 	 *
@@ -145,7 +165,7 @@ class Blocklift {
 	 * List Blobs in a container or `defaultContainer` if none is provided.
 	 *
 	 * @param {String} [containerName]
-	 * @return {Promise<Array>} list of blobs
+	 * @returns {Promise<Array>} list of blobs
 	 * @return {Promise<Object>} Error
 	 * @example
 	 * // list blobs in default container
@@ -168,7 +188,7 @@ class Blocklift {
 	 * @param {String} pathname
 	 * @param {String} content
 	 * @param {*} [opts={}]
-	 *
+	 * @returns {Promise}
 	 * @example
 	 * lift.upload('hello.txt', 'Hello World', { contentType: 'text/plain' })
 	 *
@@ -197,10 +217,13 @@ class Blocklift {
 	}
 
 	/**
+	 * Upload a file. Blocklift will attempt to set the `Content-Type` for you
+	 * based on file extension and/or contents.
 	 *
 	 * @param {String} sourcePath - source file pathname
 	 * @param {String} blobPath - desintation file pathname on Azure
 	 * @param {Object} [opts = {}]
+	 * @returns {Promise}
 	 * @example
 	 * lift.uploadFile('local-file.png', 'folder/image.png')
 	 *
@@ -231,10 +254,12 @@ class Blocklift {
 	}
 
 	/**
+	 * Deletes a Blob from the Storage Account
 	 *
 	 * @param {String} pathname path to file
 	 * @param {Object} [opts]
 	 * @param {String} [opts.container] file's container name
+	 * @returns {Promise}
 	 * @example
 	 * lift.deleteFile('folder/image.png') // uses default container
 	 * lift.deleteFile('folder/image.png', { container: 'my-container' })
