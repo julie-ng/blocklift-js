@@ -156,12 +156,18 @@ class Blocklift {
 			})
 	}
 
-	async deleteFile (pathname, opts = {}) {
+	/**
+	 *
+	 * @param {String} pathname path to file
+	 * @param {Object} [opts]
+	 * @param {String} [opts.container] file's container name
+	 */
+	async deleteBlob (pathname, opts = {}) {
 		const params = {
 			container: opts.container || this.defaultContainer,
 			pathname: pathname
 		}
-		return this.sdk.deleteFile(params)
+		return this.sdk.deleteBlob(params)
 			.then((res) => res)
 			.catch((err) => { throw new ClientError(err) })
 	}

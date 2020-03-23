@@ -103,7 +103,7 @@ class AzureSDK {
 	 * @param {String} params.container
 	 * @param {String} params.blobPathname - pathname for destination blob without container prefix
 	 */
-	async deleteFile (params, opts = {}) {
+	async deleteBlob (params, opts = {}) {
 		return this.service
 			.getContainerClient(params.container)
 			.getBlockBlobClient(params.pathname)

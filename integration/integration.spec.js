@@ -86,13 +86,13 @@ describe (`Integration Specs`, () => {
 		})
 
 		it ('can delete blobs', async () => {
-			let del1 = await lift.deleteFile(`newblob-${runId}.txt`)
+			let del1 = await lift.deleteBlob(`newblob-${runId}.txt`)
 			expect(del1.errorCode).toBe(undefined)
 
-			const del2 = await lift.deleteFile(`hello-${runId}.txt`)
+			const del2 = await lift.deleteBlob(`hello-${runId}.txt`)
 			expect(del2.errorCode).toBe(undefined)
 
-			const del3 = await lift.deleteFile(`image-${runId}.png`)
+			const del3 = await lift.deleteBlob(`image-${runId}.png`)
 			expect(del3.errorCode).toBe(undefined)
 		})
 	})

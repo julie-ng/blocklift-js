@@ -105,7 +105,7 @@ describe ('Blocklift.js', () => {
 			pending ('it calls `uploadFile` on SDK')
 		})
 
-		describe ('deleteFile()', () => {
+		describe ('deleteBlob()', () => {
 			pending ('it calls `delete` on SDK')
 		})
 
