@@ -21,6 +21,8 @@ const BlobUploadOptions = require('./blob-upload-options')
  *   .getBlockBlobClient('destination.png')
  *   .uploadFile('local-file.png')
  * ```
+ *
+ * @private
  */
 class AzureSDK {
 

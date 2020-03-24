@@ -59,18 +59,19 @@ class Blocklift {
 	constructor (opts = {}) {
 
 		/**
-		 * Storage Account Name
+		 * [Azure Storage Account name](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview#naming-storage-accounts) e.g. `mystorageaccount`
 		 *
 		 * @readonly
-		 * @type {String} account [Azure Storage Account name](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview#naming-storage-accounts) e.g. `mystorageaccount`
+		 * @type {String}
 		 */
 		this.account = opts.account
 
 		/**
-		 * Hostname for Azure Storage Account
+		 * Hostname for Azure Storage Account e.g. `https://myaccount.blob.core.windows.net`
 		 *
+		 * @private
 		 * @readonly
-		 * @type {String} host e.g. `https://myaccount.blob.core.windows.net`
+		 * @type {String}
 		 */
 		this.host = `https://${opts.account}.blob.core.windows.net`
 
@@ -85,6 +86,7 @@ class Blocklift {
 		/**
 		 * Reference to AzureSDK Wrapper
 		 *
+		 * @private
 		 * @readonly
 		 * @type {AzureSDK}
 		 */
