@@ -2,5 +2,6 @@ exclude_patterns:
 - 'coverage/'
 - 'dist/'
 - 'docs/'
+- 'test/'
 - '**/node_modules/'
 - '**/*.spec.js'

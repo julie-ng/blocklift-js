@@ -3,6 +3,7 @@
 *.spec.js
 coverage/
 docs/
+test/
 integration/
 dev.js
 schema.md
