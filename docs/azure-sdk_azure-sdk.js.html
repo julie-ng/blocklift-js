@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>blocklift.js: azure-sdk/azure-sdk.js</title>
+    
+      <link type="text/css" rel="stylesheet" href="styles/vendor/prism-okaidia.css">
+    
+    <link type="text/css" rel="stylesheet" href="styles/styles.css">
+    
+    
+    <style>
+      :root {
+      
+      
+        --text-color: #111;
+      
+      
+        --subheading-color: #111;
+      
+      
+        --nav-width: 280px;
+      
+      
+        --nav-bg-color: #f9f9f9;
+      
+      
+        --nav-link-color: #1a1a1a;
+      
+      
+        --nav-heading-color: #eee;
+      
+      
+        --nav-text-color: #ccc;
+      
+      
+        --nav-title-color: #1a1a1a;
+      
+      
+        --nav-title-align: left;
+      
+      
+        --nav-title-size: 2em;
+      
+      
+        --nav-title-margin-bottom: 1em;
+      
+      
+        --nav-list-margin-left: 0;
+      
+      
+        --nav-heading-display: none;
+      
+      
+        --member-name-signature-display: none;
+      
+      }
+    </style>
+    
+</head>
+<body>
+
+<header class="layout-header">
+  
+  <h1>
+    <a href="./index.html">
+      blocklift.js
+    </a>
+  </h1>
+  <nav class="layout-nav">
+    <ul><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class" title="class">C</span><span class="nav-item-name is-class"><a href="Blocklift.html">Blocklift</a></span></li><li class="nav-item"><span class="nav-item-type type-member" title="member">M</span><span class="nav-item-name is-member"><a href="Blocklift.html#account">account</a></span></li><li class="nav-item"><span class="nav-item-type type-member" title="member">M</span><span class="nav-item-name is-member"><a href="Blocklift.html#defaultContainer">defaultContainer</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#createContainer">createContainer</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#deleteBlob">deleteBlob</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#deleteContainer">deleteContainer</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#getBlobUrl">getBlobUrl</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#listBlobs">listBlobs</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#listContainers">listContainers</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#upload">upload</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#uploadFile">uploadFile</a></span></li></ul>
+  </nav>
+</header>
+
+
+<main class="layout-main  layout-content--source">
+  <div class="container">
+    <p class="page-kind">source</p>
+    <h1 class="page-title">azure-sdk/azure-sdk.js</h1>
+    
+
+
+
+    
+
+<section>
+    <article>
+        <pre id="source" class="source-page line-numbers"><code class="language-js">const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storage-blob')
+const BlobUploadOptions = require('./blob-upload-options')
+
+/**
+ *
+ * Abstracts all the chaining required to use Azure SDK
+ * and converts iterables to standard objects. For example,
+ * as a developer, a single method is easier to understand and therefore preferred:
+ *
+ * ```javascript
+ * // Blocklift API - simple and preferred:
+ * service.uploadFile('local-file.png', 'destination.png')
+ * ```
+ *
+ * As a developer, dealing with the internal interfaces is _not_ preferred
+ *
+ * ```javascript
+ * // Azure SDK API - clunky and not preferred
+ * service
+ *   .getContainerClient('container')
+ *   .getBlockBlobClient('destination.png')
+ *   .uploadFile('local-file.png')
+ * ```
+ *
+ * @private
+ */
+class AzureSDK {
+
+	/**
+	 *
+	 * @param {Object} opts
+	 * @param {String} opts.account
+	 */
+	constructor (opts = {}) {
+		const sharedKeyCredential = new StorageSharedKeyCredential(opts.account, opts.accessKey)
+
+		/**
+		 * Azure Storage Account name for reference
+		 *
+		 * @readonly
+		 * @type {String}
+		 */
+		this.account = opts.account
+
+		/**
+		 * Default container name, used if no container is specified when calling the API
+		 *
+		 * @readonly
+		 * @type {String|null}
+		 */
+		this.defaultContainer = opts.defaultContainer || null
+
+		/**
+		 * Reference to [Blob Service Client from Azure SDK](https://azuresdkdocs.blob.core.windows.net/$web/javascript/azure-storage-blob/12.0.2/classes/blobserviceclient.html)
+		 *
+		 * @readonly
+		 * @type {BlobServiceClient}
+		 */
+		this.service = new BlobServiceClient(
+			`https://${opts.account}.blob.core.windows.net`,
+			sharedKeyCredential
+		)
+	}
+
+	// ---- Containers ----
+
+	/**
+	 * @param {String} name - name of container to create
+	 * @returns {Promise}
+	 */
+	async createContainer (name) {
+		return await this.service
+			.getContainerClient(name)
+			.create()
+	}
+
+	/**
+	 * @param {String} name - name of container to delete
+	 * @returns {Promise}
+	 */
+	async deleteContainer (name) {
+		return await this.service
+			.getContainerClient(name)
+			.delete()
+	}
+
+	/**
+	 * @returns {Promise&lt;Array>} list of containers
+	 * @returns {Promise&lt;Object>} Error
+	 */
+	async listContainers () {
+		const containers = []
+		const iter = this.service.listContainers()
+
+		for await (const c of iter) {
+			containers.push(c)
+		}
+
+		return containers
+	}
+
+	// ---- Blobs ----
+
+	/**
+	 *
+	 * @param {String} container - containername
+	 * @return {Array}
+	 */
+	async listBlobs (container) {
+		const blobs = []
+		const containerClient = this.service.getContainerClient(container)
+		const iter = await containerClient.listBlobsFlat()
+
+		for await (const b of iter) {
+			blobs.push(b)
+		}
+
+		return blobs
+	}
+
+	/**
+	 * Uploads Raw Content
+	 * Todo: add options, e.g. parallel upload block size
+	 *
+	 * @param {String} params.container
+	 * @param {String} params.pathname - path name for blob without container prefix
+	 * @param {String} params.content
+	 * @param {String} [opts.contentType] - content type
+	 * @return {Promise}
+	 */
+	async upload (params, opts = {}) {
+		const blobOpts = new BlobUploadOptions(opts)
+
+		return this.service
+			.getContainerClient(params.container)
+			.getBlockBlobClient(params.pathname)
+			.upload(params.content, params.content.length, blobOpts)
+	}
+
+	/**
+	 * Uploads file
+	 *
+	 * Todo: add options, e.g. parallel upload block size
+	 * For more blob upload options see
+	 * [official SDK Docs](https://azuresdkdocs.blob.core.windows.net/$web/javascript/azure-storage-blob/12.0.2/classes/blockblobclient.html#uploadfile).
+	 *
+	 * @param {String} params.container
+	 * @param {String} params.filePathname - pathname of of source file
+	 * @param {String} params.blobPathname - pathname for destination blob without container prefix
+	 * @param {String} [opts.contentType] - content type
+	 * @return {Promise}
+	 */
+	async uploadFile (params, opts = {}) {
+		const blobOpts = new BlobUploadOptions(opts)
+
+		return this.service
+			.getContainerClient(params.container)
+			.getBlockBlobClient(params.blobPathname)
+			.uploadFile(params.filePathname, blobOpts)
+	}
+
+	/**
+	 * @param {String} params.container - container name
+	 * @param {String} params.blobPathname - pathname for destination blob without container prefix
+	 * @return {Promise}
+	 */
+	async deleteBlob (params, opts = {}) {
+		return this.service
+			.getContainerClient(params.container)
+			.getBlockBlobClient(params.pathname)
+			.delete()
+	}
+}
+
+module.exports = AzureSDK
+</code></pre>
+    </article>
+</section>
+
+
+
+
+  </div>
+</main>
+
+<footer class="layout-footer">
+  <div class="container">
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Mar 25 2020 13:30:45 GMT+0100 (Central European Standard Time)
+  </div>
+</footer>
+
+
+
+<script src="scripts/prism.dev.js"></script>
+</body>
+</html>

@@ -1,0 +1,2058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>blocklift.js: Blocklift</title>
+    
+      <link type="text/css" rel="stylesheet" href="styles/vendor/prism-okaidia.css">
+    
+    <link type="text/css" rel="stylesheet" href="styles/styles.css">
+    
+    
+    <style>
+      :root {
+      
+      
+        --text-color: #111;
+      
+      
+        --subheading-color: #111;
+      
+      
+        --nav-width: 280px;
+      
+      
+        --nav-bg-color: #f9f9f9;
+      
+      
+        --nav-link-color: #1a1a1a;
+      
+      
+        --nav-heading-color: #eee;
+      
+      
+        --nav-text-color: #ccc;
+      
+      
+        --nav-title-color: #1a1a1a;
+      
+      
+        --nav-title-align: left;
+      
+      
+        --nav-title-size: 2em;
+      
+      
+        --nav-title-margin-bottom: 1em;
+      
+      
+        --nav-list-margin-left: 0;
+      
+      
+        --nav-heading-display: none;
+      
+      
+        --member-name-signature-display: none;
+      
+      }
+    </style>
+    
+</head>
+<body>
+
+<header class="layout-header">
+  
+  <h1>
+    <a href="./index.html">
+      blocklift.js
+    </a>
+  </h1>
+  <nav class="layout-nav">
+    <ul><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class" title="class">C</span><span class="nav-item-name is-class"><a href="Blocklift.html">Blocklift</a></span></li><li class="nav-item"><span class="nav-item-type type-member" title="member">M</span><span class="nav-item-name is-member"><a href="Blocklift.html#account">account</a></span></li><li class="nav-item"><span class="nav-item-type type-member" title="member">M</span><span class="nav-item-name is-member"><a href="Blocklift.html#defaultContainer">defaultContainer</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#createContainer">createContainer</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#deleteBlob">deleteBlob</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#deleteContainer">deleteContainer</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#getBlobUrl">getBlobUrl</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#listBlobs">listBlobs</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#listContainers">listContainers</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#upload">upload</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#uploadFile">uploadFile</a></span></li></ul>
+  </nav>
+</header>
+
+
+<main class="layout-main ">
+  <div class="container">
+    <p class="page-kind">Class</p>
+    <h1 class="page-title">Blocklift</h1>
+    
+
+
+
+
+<section>
+
+
+<header class="class">
+
+
+    
+        
+        <!-- <h2>Blocklift</h2> -->
+
+        
+
+        
+            <h4 class="method-heading">Summary</h4>
+            <div class="class-summary">Creates a new Blocklift client for Azure Storage for blobs (binary large objects).</div>
+        
+
+        
+            <h4 class="method-heading">Description</h4>
+            <div class="class-description"><h2>Syntax of your choice: <code>async</code>/<code>await</code> or <code>Promise</code></h2>
+<p>Blocklift.js is designed dead simple and will accept either syntax of your choice.
+Unlike the Azure SDK, Blocklift doesn't care and is bilingual.
+Just make sure to use and catch errors appropriately.</p>
+<p><strong>NOTE</strong> - examples in documentation below do not include either syntax to avoid repetition.
+It is your responsibility to implement with either Promises or async/await syntax.</p>
+<h4>Use with classic <code>Promise</code> syntax</h4>
+<pre class="prettyprint source lang-javascript"><code>lift.createContainer('name')
+  .then(res => console.log(res))
+  .catch(err => console.log(err))
+</code></pre>
+<h4>Use with <code>async</code>/<code>await</code> syntax</h4>
+<pre class="prettyprint source lang-javascript"><code>async main () {
+  try {
+    const res = await lift.createContainer('name')
+    console.log(res)
+  }
+  catch ((err) => {
+    console.log(err)
+  })
+}
+
+main()
+</code></pre>
+<h2>Responses</h2>
+<p>The Azure SDK leverages the REST API and server responses are generally passed through to Blocklift. In some cases, the responses are extended to include some handy properities, e.g. URL of uploaded blob.</p></div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+
+
+
+    
+        
+
+
+
+
+
+    
+
+
+    
+    <h3 class="subtitle">Constructor</h3>
+    
+
+    <div class="method-type">
+    
+    </div>
+
+    <h4 class="method-name" id="Blocklift">new Blocklift<span class="signature">()</span><span class="return-type-signature"></span>
+    </h4>
+
+
+
+
+
+<div class="method-description">
+    
+    <p>Creates a new Blocklift client for Azure Storage for blobs (binary large objects).</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Parameters</h4>
+    
+
+<ul class="method-params">
+    
+
+        <li>
+            
+                <span class="param-name">opts.account</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    
+
+            
+
+            
+
+            
+
+            <div class="param-description"><p>Blob Storage Account name</p></div>
+            
+        </li>
+
+    
+
+        <li>
+            
+                <span class="param-name">opts.accessKey</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    
+
+            
+
+            
+
+            
+
+            <div class="param-description"><p>Blob Storage Account Access Key</p></div>
+            
+        </li>
+
+    
+</ul>
+
+
+
+
+
+<div class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+
+
+
+    <h4 class="method-heading">Example</h4>
+    
+    <pre><code class="language-js">const lift = new Blocklift({
+  account: 'your account name',
+  accessKey: 'your access key',
+  defaultContainer: 'your-default-container' // must already exist
+})</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Source</h4>
+    <ul>
+        <li class="method-source">
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.59">, line 59</a>
+        </li>
+    </ul>
+
+
+
+    
+    </div>
+
+    
+
+    
+
+     
+
+    
+
+    
+
+
+    
+        <h3 class="subtitle">Members</h3>
+
+        
+            
+
+<article class="member">
+    <div class="method-type">
+        <span class="method-type-signature is-readonly">readonly</span>
+    </div>
+<h4 class="member-name" id="account">account<span class="type-signature">String</span></h4>
+
+
+
+
+<div class="description">
+    <p><a href="https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview#naming-storage-accounts">Azure Storage Account name</a> e.g. <code>mystorageaccount</code></p>
+</div>
+
+
+
+    <h4>Type</h4>
+    <ul>
+        <li>
+            
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    
+
+        </li>
+    </ul>
+
+
+
+
+
+<div class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    <h4>Source</h4>
+    <ul>
+        <li class="method-source">
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.67">, line 67</a>
+        </li>
+    </ul>
+
+
+</article>
+        
+            
+
+<article class="member">
+    <div class="method-type">
+        <span class="method-type-signature is-readonly">readonly</span>
+    </div>
+<h4 class="member-name" id="defaultContainer">defaultContainer<span class="type-signature">String|Object</span></h4>
+
+
+
+
+<div class="description">
+    <p>Name of default container for blobs, used if container is not specified in API calls.</p>
+</div>
+
+
+
+    <h4>Type</h4>
+    <ul>
+        <li>
+            
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    |
+
+    <span class="param-type">
+        <code>Object</code>
+    </span>
+    
+
+        </li>
+    </ul>
+
+
+
+
+
+<div class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    <h4>Source</h4>
+    <ul>
+        <li class="method-source">
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.84">, line 84</a>
+        </li>
+    </ul>
+
+
+</article>
+        
+    
+
+    
+        <h3 class="subtitle">Methods</h3>
+
+        
+            
+
+
+    <article class="method">
+
+
+
+
+    
+
+
+    
+
+    <div class="method-type">
+    
+    </div>
+
+    <h4 class="method-name" id="createContainer">createContainer<span class="signature">(name)</span><span class="return-type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+
+
+
+
+<div class="method-description">
+    
+    <p>Creates a new container</p>
+<p>Will throw an error if name is not all lowercase.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Parameters</h4>
+    
+
+<ul class="method-params">
+    
+
+        <li>
+            
+                <span class="param-name">name</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    
+
+            
+
+            
+
+            
+
+            <div class="param-description"><p>will be transformed to lowercase per Azure requirements</p></div>
+            
+        </li>
+
+    
+</ul>
+
+
+
+
+
+<div class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+    <h4 class="method-heading">Returns</h4>
+    <ul>
+    
+        <li class="method-returns">
+            
+                <code>Promise</code>
+            
+            
+        </li>
+    
+    </ul>
+
+
+
+
+    <h4 class="method-heading">Example</h4>
+    
+    <pre><code class="language-js">lift.createContainer('name')</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Source</h4>
+    <ul>
+        <li class="method-source">
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.109">, line 109</a>
+        </li>
+    </ul>
+
+
+
+    </article>
+
+        
+            
+
+
+    <article class="method">
+
+
+
+
+    
+
+
+    
+
+    <div class="method-type">
+    <span class="method-type-signature is-async">async</span>
+    </div>
+
+    <h4 class="method-name" id="deleteBlob">deleteBlob<span class="signature">(pathname, opts<span class="signature-attributes">opt</span>)</span><span class="return-type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+
+
+
+
+<div class="method-description">
+    
+    <p>Deletes a Blob from the Storage Account</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Parameters</h4>
+    
+
+<ul class="method-params">
+    
+
+        <li>
+            
+                <span class="param-name">pathname</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    
+
+            
+
+            
+                <span class="param-attributes">
+                
+
+                
+
+                
+                </span>
+            
+
+            
+
+            <div class="param-description"><p>path to file</p></div>
+            
+        </li>
+
+    
+
+        <li>
+            
+                <span class="param-name">opts</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>Object</code>
+    </span>
+    
+
+            
+
+            
+                <span class="param-attributes">
+                
+                    &lt;optional&gt;<br>
+                
+
+                
+
+                
+                </span>
+            
+
+            
+
+            <div class="param-description"></div>
+            
+                <p class="param-properties">Properties</p>
+                
+
+<ul class="method-params">
+    
+
+        <li>
+            
+                <span class="param-name">container</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    
+
+            
+
+            
+                <span class="param-attributes">
+                
+                    &lt;optional&gt;<br>
+                
+
+                
+
+                
+                </span>
+            
+
+            
+
+            <div class="param-description"><p>file's container name</p></div>
+            
+        </li>
+
+    
+</ul>
+            
+        </li>
+
+    
+</ul>
+
+
+
+
+
+<div class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+    <h4 class="method-heading">Returns</h4>
+    <ul>
+    
+        <li class="method-returns">
+            
+                <code>Promise</code>
+            
+            
+        </li>
+    
+    </ul>
+
+
+
+
+    <h4 class="method-heading">Example</h4>
+    
+    <pre><code class="language-js">lift.deleteBlob('folder/image.png') // uses default container
+lift.deleteBlob('folder/image.png', { container: 'my-container' })</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Source</h4>
+    <ul>
+        <li class="method-source">
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.270">, line 270</a>
+        </li>
+    </ul>
+
+
+
+    </article>
+
+        
+            
+
+
+    <article class="method">
+
+
+
+
+    
+
+
+    
+
+    <div class="method-type">
+    
+    </div>
+
+    <h4 class="method-name" id="deleteContainer">deleteContainer<span class="signature">(name)</span><span class="return-type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+
+
+
+
+<div class="method-description">
+    
+    <p>Delete a container</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Parameters</h4>
+    
+
+<ul class="method-params">
+    
+
+        <li>
+            
+                <span class="param-name">name</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    
+
+            
+
+            
+
+            
+
+            <div class="param-description"><p>container name</p></div>
+            
+        </li>
+
+    
+</ul>
+
+
+
+
+
+<div class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+    <h4 class="method-heading">Returns</h4>
+    <ul>
+    
+        <li class="method-returns">
+            
+                <code>Promise</code>
+            
+            
+        </li>
+    
+    </ul>
+
+
+
+
+    <h4 class="method-heading">Example</h4>
+    
+    <pre><code class="language-js">lift.deleteContainer('name')</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Source</h4>
+    <ul>
+        <li class="method-source">
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.135">, line 135</a>
+        </li>
+    </ul>
+
+
+
+    </article>
+
+        
+            
+
+
+    <article class="method">
+
+
+
+
+    
+
+
+    
+
+    <div class="method-type">
+    
+    </div>
+
+    <h4 class="method-name" id="getBlobUrl">getBlobUrl<span class="signature">(pathname, container<span class="signature-attributes">opt</span>)</span><span class="return-type-signature"> &rarr; {String}</span>
+    </h4>
+
+
+
+
+
+<div class="method-description">
+    
+    <p>Helper that returns URL for a given blob in a given container, e.g. <code>https://myaccount.blob.core.windows.net/default/my-image.png</code></p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Parameters</h4>
+    
+
+<ul class="method-params">
+    
+
+        <li>
+            
+                <span class="param-name">pathname</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    
+
+            
+
+            
+                <span class="param-attributes">
+                
+
+                
+
+                
+                </span>
+            
+
+            
+
+            <div class="param-description"><p>path to file</p></div>
+            
+        </li>
+
+    
+
+        <li>
+            
+                <span class="param-name">container</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    
+
+            
+
+            
+                <span class="param-attributes">
+                
+                    &lt;optional&gt;<br>
+                
+
+                
+
+                
+                </span>
+            
+
+            
+
+            <div class="param-description"><p>container name</p></div>
+            
+        </li>
+
+    
+</ul>
+
+
+
+
+
+<div class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+    <h4 class="method-heading">Returns</h4>
+    <ul>
+    
+        <li class="method-returns">
+            
+                <code>String</code>
+            
+            
+        </li>
+    
+    </ul>
+
+
+
+
+    <h4 class="method-heading">Example</h4>
+    
+    <pre><code class="language-js">lift.getBlobUrl('my-image.png')</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Source</h4>
+    <ul>
+        <li class="method-source">
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.290">, line 290</a>
+        </li>
+    </ul>
+
+
+
+    </article>
+
+        
+            
+
+
+    <article class="method">
+
+
+
+
+    
+
+
+    
+
+    <div class="method-type">
+    
+    </div>
+
+    <h4 class="method-name" id="listBlobs">listBlobs<span class="signature">(containerName<span class="signature-attributes">opt</span>)</span><span class="return-type-signature"> &rarr; {Promise.&lt;Array>|Promise.&lt;Object>}</span>
+    </h4>
+
+
+
+
+
+<div class="method-description">
+    
+    <p>List Blobs in a container or <code>defaultContainer</code> if none is provided.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Parameters</h4>
+    
+
+<ul class="method-params">
+    
+
+        <li>
+            
+                <span class="param-name">containerName</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    
+
+            
+
+            
+                <span class="param-attributes">
+                
+                    &lt;optional&gt;<br>
+                
+
+                
+
+                
+                </span>
+            
+
+            
+
+            <div class="param-description"></div>
+            
+        </li>
+
+    
+</ul>
+
+
+
+
+
+<div class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+    <h4 class="method-heading">Returns</h4>
+    <ul>
+    
+        <li class="method-returns">
+            
+                <code>Promise.&lt;Array></code>
+            
+            
+                <p>list of blobs</p>
+            
+        </li>
+    
+        <li class="method-returns">
+            
+                <code>Promise.&lt;Object></code>
+            
+            
+                <p>Error</p>
+            
+        </li>
+    
+    </ul>
+
+
+
+
+    <h4 class="method-heading">Example</h4>
+    
+    <pre><code class="language-js">// list blobs in default container
+lift.listBlobs()
+
+// list blobs in specific container
+lift.listBlobs('container')</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Source</h4>
+    <ul>
+        <li class="method-source">
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.179">, line 179</a>
+        </li>
+    </ul>
+
+
+
+    </article>
+
+        
+            
+
+
+    <article class="method">
+
+
+
+
+    
+
+
+    
+
+    <div class="method-type">
+    
+    </div>
+
+    <h4 class="method-name" id="listContainers">listContainers<span class="signature">()</span><span class="return-type-signature"> &rarr; {Promise.&lt;Array>|Promise.&lt;Object>}</span>
+    </h4>
+
+
+
+
+
+<div class="method-description">
+    
+    <p>List Containers</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+    <h4 class="method-heading">Returns</h4>
+    <ul>
+    
+        <li class="method-returns">
+            
+                <code>Promise.&lt;Array></code>
+            
+            
+                <p>list of containers</p>
+            
+        </li>
+    
+        <li class="method-returns">
+            
+                <code>Promise.&lt;Object></code>
+            
+            
+                <p>Error</p>
+            
+        </li>
+    
+    </ul>
+
+
+
+
+    <h4 class="method-heading">Example</h4>
+    
+    <pre><code class="language-js">lift.listContainers()</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Source</h4>
+    <ul>
+        <li class="method-source">
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.158">, line 158</a>
+        </li>
+    </ul>
+
+
+
+    </article>
+
+        
+            
+
+
+    <article class="method">
+
+
+
+
+    
+
+
+    
+
+    <div class="method-type">
+    <span class="method-type-signature is-async">async</span>
+    </div>
+
+    <h4 class="method-name" id="upload">upload<span class="signature">(pathname, content, opts<span class="signature-attributes">opt</span>)</span><span class="return-type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+
+
+
+
+<div class="method-description">
+    
+    <p>Upload content
+at the moment not recommended because it does not include headers
+for example <code>Content-Type</code></p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Parameters</h4>
+    
+
+<ul class="method-params">
+    
+
+        <li>
+            
+                <span class="param-name">pathname</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    
+
+            
+
+            
+                <span class="param-attributes">
+                
+
+                
+
+                
+                </span>
+            
+
+            
+                
+            
+
+            <div class="param-description"></div>
+            
+        </li>
+
+    
+
+        <li>
+            
+                <span class="param-name">content</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    
+
+            
+
+            
+                <span class="param-attributes">
+                
+
+                
+
+                
+                </span>
+            
+
+            
+                
+            
+
+            <div class="param-description"></div>
+            
+        </li>
+
+    
+
+        <li>
+            
+                <span class="param-name">opts</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>*</code>
+    </span>
+    
+
+            
+
+            
+                <span class="param-attributes">
+                
+                    &lt;optional&gt;<br>
+                
+
+                
+
+                
+                </span>
+            
+
+            
+                
+                    <span class="param-default">
+                        {}
+                    </span>
+                
+            
+
+            <div class="param-description"></div>
+            
+        </li>
+
+    
+</ul>
+
+
+
+
+
+<div class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+    <h4 class="method-heading">Returns</h4>
+    <ul>
+    
+        <li class="method-returns">
+            
+                <code>Promise</code>
+            
+            
+        </li>
+    
+    </ul>
+
+
+
+
+    <h4 class="method-heading">Example</h4>
+    
+    <pre><code class="language-js">lift.upload('hello.txt', 'Hello World', { contentType: 'text/plain' })</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Source</h4>
+    <ul>
+        <li class="method-source">
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.198">, line 198</a>
+        </li>
+    </ul>
+
+
+
+    </article>
+
+        
+            
+
+
+    <article class="method">
+
+
+
+
+    
+
+
+    
+
+    <div class="method-type">
+    <span class="method-type-signature is-async">async</span>
+    </div>
+
+    <h4 class="method-name" id="uploadFile">uploadFile<span class="signature">(sourcePath, blobPath, opts<span class="signature-attributes">opt</span>)</span><span class="return-type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+
+
+
+
+<div class="method-description">
+    
+    <p>Upload a file. Blocklift will attempt to set the <code>Content-Type</code> for you
+based on file extension and/or contents.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Parameters</h4>
+    
+
+<ul class="method-params">
+    
+
+        <li>
+            
+                <span class="param-name">sourcePath</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    
+
+            
+
+            
+                <span class="param-attributes">
+                
+
+                
+
+                
+                </span>
+            
+
+            
+                
+            
+
+            <div class="param-description"><p>source file pathname</p></div>
+            
+        </li>
+
+    
+
+        <li>
+            
+                <span class="param-name">blobPath</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>String</code>
+    </span>
+    
+
+            
+
+            
+                <span class="param-attributes">
+                
+
+                
+
+                
+                </span>
+            
+
+            
+                
+            
+
+            <div class="param-description"><p>desintation file pathname on Azure</p></div>
+            
+        </li>
+
+    
+
+        <li>
+            
+                <span class="param-name">opts</span>
+            
+
+            
+                
+
+
+    <span class="param-type">
+        <code>Object</code>
+    </span>
+    
+
+            
+
+            
+                <span class="param-attributes">
+                
+                    &lt;optional&gt;<br>
+                
+
+                
+
+                
+                </span>
+            
+
+            
+                
+                    <span class="param-default">
+                        {}
+                    </span>
+                
+            
+
+            <div class="param-description"></div>
+            
+        </li>
+
+    
+</ul>
+
+
+
+
+
+<div class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</div>
+
+
+
+    <h4 class="method-heading">Returns</h4>
+    <ul>
+    
+        <li class="method-returns">
+            
+                <code>Promise</code>
+            
+            
+        </li>
+    
+    </ul>
+
+
+
+
+    <h4 class="method-heading">Example</h4>
+    
+    <pre><code class="language-js">lift.uploadFile('local-file.png', 'folder/image.png')</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h4 class="method-heading">Source</h4>
+    <ul>
+        <li class="method-source">
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.233">, line 233</a>
+        </li>
+    </ul>
+
+
+
+    </article>
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+  </div>
+</main>
+
+<footer class="layout-footer">
+  <div class="container">
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Mar 25 2020 13:30:45 GMT+0100 (Central European Standard Time)
+  </div>
+</footer>
+
+
+
+<script src="scripts/prism.dev.js"></script>
+</body>
+</html>

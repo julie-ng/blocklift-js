@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>blocklift.js: </title>
+    
+      <link type="text/css" rel="stylesheet" href="styles/vendor/prism-okaidia.css">
+    
+    <link type="text/css" rel="stylesheet" href="styles/styles.css">
+    
+    
+    <style>
+      :root {
+      
+      
+        --text-color: #111;
+      
+      
+        --subheading-color: #111;
+      
+      
+        --nav-width: 280px;
+      
+      
+        --nav-bg-color: #f9f9f9;
+      
+      
+        --nav-link-color: #1a1a1a;
+      
+      
+        --nav-heading-color: #eee;
+      
+      
+        --nav-text-color: #ccc;
+      
+      
+        --nav-title-color: #1a1a1a;
+      
+      
+        --nav-title-align: left;
+      
+      
+        --nav-title-size: 2em;
+      
+      
+        --nav-title-margin-bottom: 1em;
+      
+      
+        --nav-list-margin-left: 0;
+      
+      
+        --nav-heading-display: none;
+      
+      
+        --member-name-signature-display: none;
+      
+      }
+    </style>
+    
+</head>
+<body>
+
+<header class="layout-header">
+  
+  <h1>
+    <a href="./index.html">
+      blocklift.js
+    </a>
+  </h1>
+  <nav class="layout-nav">
+    <ul><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class" title="class">C</span><span class="nav-item-name is-class"><a href="Blocklift.html">Blocklift</a></span></li><li class="nav-item"><span class="nav-item-type type-member" title="member">M</span><span class="nav-item-name is-member"><a href="Blocklift.html#account">account</a></span></li><li class="nav-item"><span class="nav-item-type type-member" title="member">M</span><span class="nav-item-name is-member"><a href="Blocklift.html#defaultContainer">defaultContainer</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#createContainer">createContainer</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#deleteBlob">deleteBlob</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#deleteContainer">deleteContainer</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#getBlobUrl">getBlobUrl</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#listBlobs">listBlobs</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#listContainers">listContainers</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#upload">upload</a></span></li><li class="nav-item"><span class="nav-item-type type-function" title="function">F</span><span class="nav-item-name is-function"><a href="Blocklift.html#uploadFile">uploadFile</a></span></li></ul>
+  </nav>
+</header>
+
+
+<main class="layout-main ">
+  <div class="container">
+    <p class="page-kind"></p>
+    <h1 class="page-title"></h1>
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section class="readme">
+        <article><h1>blocklift-js</h1>
+<p>A dead simple and developer friendly JavaScript library for handling object storage on Azure</p>
+<p><a href="https://travis-ci.org/julie-ng/blocklift-js"><img src="https://travis-ci.org/julie-ng/blocklift-js.svg?branch=master" alt="Build Status"></a>
+<a href="https://codeclimate.com/github/julie-ng/blocklift-js/test_coverage"><img src="https://api.codeclimate.com/v1/badges/4b5bf0e191de7c6c74c8/test_coverage" alt="Test Coverage"></a>
+<a href="https://codeclimate.com/github/julie-ng/blocklift-js/maintainability"><img src="https://api.codeclimate.com/v1/badges/4b5bf0e191de7c6c74c8/maintainability" alt="Maintainability"></a></p>
+<h2>Developer Friendly API</h2>
+<p>For a simple blob operation, the official <a href="https://github.com/Azure/azure-sdk-for-js/tree/master/sdk/storage/storage-blob">@azure/storage-blob</a> SDK requires 3 &quot;clients&quot; for the blob service, the container and the blob itself. Blocklift.js abstracts away the complexity to provide a better developer experience.</p>
+<p>Note: <code>UPPERCASE</code> represents environment variables</p>
+<pre class="prettyprint source lang-javascript"><code>const Blocklift = require('./blocklift')
+
+const lift = new Blocklift({
+	account: ACCOUNT_NAME,
+	accessKey: ACCESS_KEY,
+	defaultContainer: 'dev' // must already exist
+})
+			
+lift.upload('hello.txt', 'Hello World')
+	.then((upload) => { console.log(upload.url) })
+	.catch((err) => { … })
+</code></pre>
+<h3>Feature: Automatically get Blob URLs</h3>
+<p>In addition to standard Blob REST API response, blocklift.js also returns a <code>url</code> property for you, for example:</p>
+<pre class="prettyprint source"><code>https://accountname.blob.core.windows.net/dev/hello.txt
+</code></pre>
+<h3>Feature: Set a default container</h3>
+<p>Why repeatedly pass a container parameter or client, when you can just set a default once and then forget about it?</p>
+<pre class="prettyprint source lang-javascript"><code>const lift = new Blocklift({
+	account: ACCOUNT_NAME,
+	accessKey: ACCESS_KEY,
+	defaultContainer: 'dev' // must already exist
+})
+</code></pre>
+<p>Of course, you can always choose to use a different container and pass an <em>optional</em> <code>container</code> parameter in individual operations:</p>
+<pre class="prettyprint source lang-javascript"><code>// optional container param
+lift.upload('hello.txt', 'Hello World', { conatiner: 'not-default' })
+</code></pre>
+<h3>Feature: Automatic <code>Content-Type</code> detection</h3>
+<p>Blocklift.js automatically sets a <code>Content-Type</code> based on file contents or filename. This helps browsers identify file types and decide how to handle them. You want to show users content as quickly as possible, i.e. in browser and not have them dig through their Downloads folder.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Content Type</th>
+<th style="text-align:left">Browser Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">none</td>
+<td style="text-align:left">browser downloads file (default Azure SDK behavior)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>text/plain</code></td>
+<td style="text-align:left">display text in browser</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>image/jpg</code></td>
+<td style="text-align:left">display image in browser</td>
+</tr>
+</tbody>
+</table>
+<p>Of course other file types are supported including PDFs, Microsoft Word, Powerpoint, Videos, and more. See <a href="https://www.npmjs.com/package/file-type#supported-file-types">file-type</a> package for detailed list.</p>
+<h3>Official SDK Example</h3>
+<p>Unfortunately the official <a href="https://github.com/Azure/azure-sdk-for-js/tree/master/sdk/storage/storage-blob">@azure/storage-blob</a> SDK is cumbersome to use.</p>
+<p>Compare the above with this <a href="https://github.com/Azure/azure-sdk-for-js/tree/master/sdk/storage/storage-blob#create-a-blob-by-uploading-data-to">official example</a>, which has been slightly simplified for fairer comparison:</p>
+<pre class="prettyprint source lang-javascript"><code>const { DefaultAzureCredential } = require(&quot;@azure/identity&quot;);
+const { BlobServiceClient } = require(&quot;@azure/storage-blob&quot;);
+const defaultAzureCredential = new DefaultAzureCredential();
+const account = ACCOUNT_NAME;
+
+const blobServiceClient = new BlobServiceClient(
+  `https://${ACCOUNT_NAME}.blob.core.windows.net`,
+  defaultAzureCredential
+);
+
+const content = &quot;Hello world!&quot;;
+const containerClient = blobServiceClient.getContainerClient('dev');
+const blockBlobClient = containerClient.getBlockBlobClient('hello.txt');
+blockBlobClient.upload(content, content.length)
+	.then((response) => { … })
+	.catch((err) => { … })
+</code></pre></article>
+    </section>
+
+
+
+
+
+
+  </div>
+</main>
+
+<footer class="layout-footer">
+  <div class="container">
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Mar 25 2020 13:30:45 GMT+0100 (Central European Standard Time)
+  </div>
+</footer>
+
+
+
+<script src="scripts/prism.dev.js"></script>
+</body>
+</html>
