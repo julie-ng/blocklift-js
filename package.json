@@ -45,6 +45,6 @@
     "jsdoc": "^3.6.3",
     "live-server": "^1.2.1",
     "nodemon": "^2.0.2",
-    "tidy-jsdoc": "^1.2.2"
+    "tidy-jsdoc": "^1.4.0"
   }
 }

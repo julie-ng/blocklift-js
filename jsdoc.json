@@ -14,7 +14,7 @@
 		"excludePattern": "(^|\\/|\\\\)_"
 	},
 	"opts": {
-		"template": "./../tidy-jsdoc",
+		"template": "./node_modules/tidy-jsdoc",
 		"encoding": "utf8",
 		"destination": "./docs/",
 		"recurse": true,
