@@ -1,0 +1,50 @@
+{
+	"tags": {
+		"allowUnknownTags": true,
+		"dictionaries": [
+			"jsdoc",
+			"closure"
+		]
+	},
+	"source": {
+		"include": [
+			"source"
+		],
+		"includePattern": ".+\\.js(doc)?$",
+		"excludePattern": "(^|\\/|\\\\)_"
+	},
+	"opts": {
+		"template": "./node_modules/tidy-jsdoc",
+		"encoding": "utf8",
+		"destination": "./docs/",
+		"recurse": true,
+		"prism-theme": "prism-okaidia"
+	},
+	"plugins": [
+		"plugins/markdown",
+		"plugins/summarize"
+	],
+  "styles": {
+    "text-color": "#111",
+		"subheading-color": "#111",
+		"nav-width": "280px",
+		"nav-bg-color": "#f9f9f9",
+		"nav-link-color": "#1a1a1a",
+		"nav-heading-color": "#eee",
+		"nav-text-color": "#ccc",
+		"nav-title-color": "#1a1a1a",
+		"nav-title-align": "left",
+		"nav-title-size": "2em",
+		"nav-title-margin-bottom": "1em",
+		"nav-list-margin-left": "0",
+		"nav-heading-display": "none",
+		"member-name-signature-display": "none"
+  },
+	"templates": {
+		"cleverLinks": false,
+		"monospaceLinks": false
+	},
+	"metadata": {
+		"title": "blocklift.js"
+	}
+}
