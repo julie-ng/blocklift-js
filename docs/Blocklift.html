@@ -862,10 +862,28 @@ main()
 
 
 
-    <h4 class="method-heading">Example</h4>
+    <h4 class="method-heading">Examples</h4>
     
     <pre><code class="language-js">lift.deleteBlob('folder/image.png') // uses default container
 lift.deleteBlob('folder/image.png', { container: 'my-container' })</code></pre>
+
+        <p class="code-caption">Example Response</p>
+    
+    <pre><code class="language-js">{
+  name: 'container-2020-03-22-1519-a7uotq',
+  operation: 'delete',
+  message: 'Successfully deleted container container-2020-03-22-1519-a7uotq',
+  serverResponse: {
+    clientRequestId: '0cf51581-ebbe-4b4c-aaca-4d31bbad1b58',
+    requestId: '0a6759b4-a01e-0054-0154-00ea78000000',
+    version: '2019-02-02',
+    date: 2020-03-22T14:19:55.000Z,
+    errorCode: undefined,
+    'content-length': '0',
+    server: 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0',
+    body: undefined
+  }
+}</code></pre>
 
 
 
@@ -883,7 +901,7 @@ lift.deleteBlob('folder/image.png', { container: 'my-container' })</code></pre>
     <h4 class="method-heading">Source</h4>
     <ul>
         <li class="method-source">
-            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.270">, line 270</a>
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.324">, line 324</a>
         </li>
     </ul>
 
@@ -1231,7 +1249,7 @@ lift.deleteBlob('folder/image.png', { container: 'my-container' })</code></pre>
     <h4 class="method-heading">Source</h4>
     <ul>
         <li class="method-source">
-            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.290">, line 290</a>
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.344">, line 344</a>
         </li>
     </ul>
 
@@ -1408,7 +1426,7 @@ lift.listBlobs('container')</code></pre>
     <h4 class="method-heading">Source</h4>
     <ul>
         <li class="method-source">
-            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.179">, line 179</a>
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.192">, line 192</a>
         </li>
     </ul>
 
@@ -1518,9 +1536,24 @@ lift.listBlobs('container')</code></pre>
 
 
 
-    <h4 class="method-heading">Example</h4>
+    <h4 class="method-heading">Examples</h4>
     
     <pre><code class="language-js">lift.listContainers()</code></pre>
+
+        <p class="code-caption">Example Response</p>
+    
+    <pre><code class="language-js">[
+  {
+    name: 'container-1',
+    properties: {…},
+    metadata: undefined
+  },
+  {
+    name: 'container-2',
+    properties: {…},
+    metadata: undefined
+  }
+]</code></pre>
 
 
 
@@ -1538,7 +1571,7 @@ lift.listBlobs('container')</code></pre>
     <h4 class="method-heading">Source</h4>
     <ul>
         <li class="method-source">
-            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.158">, line 158</a>
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.171">, line 171</a>
         </li>
     </ul>
 
@@ -1760,9 +1793,31 @@ for example <code>Content-Type</code></p>
 
 
 
-    <h4 class="method-heading">Example</h4>
+    <h4 class="method-heading">Examples</h4>
     
     <pre><code class="language-js">lift.upload('hello.txt', 'Hello World', { contentType: 'text/plain' })</code></pre>
+
+        <p class="code-caption">Example reponse</p>
+    
+    <pre><code class="language-js">{
+  url: 'https://myaccount.blob.core.windows.net/default/hello-2020-03-22.txt',
+  serverReponse: {
+    etag: '"0x8D7CE6FCC47FC45"',
+    lastModified: 2020-03-22T14:46:26.000Z,
+    contentMD5: &lt;Buffer c4 85 73 58 38 b0 05 75 7f 3f 31 99 50 0c 0e ca>,
+    clientRequestId: 'd749b9a2-5fba-489d-a230-ba5df662f4f0',
+    requestId: '283595f3-a01e-0009-1b58-00e0fc000000',
+    version: '2019-02-02',
+    date: 2020-03-22T14:46:25.000Z,
+    isServerEncrypted: true,
+    encryptionKeySha256: undefined,
+    errorCode: undefined,
+    'content-length': '0',
+    server: 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0',
+    'x-ms-content-crc64': 'awyymjQimGI=',
+    body: undefined
+  }
+}</code></pre>
 
 
 
@@ -1780,7 +1835,7 @@ for example <code>Content-Type</code></p>
     <h4 class="method-heading">Source</h4>
     <ul>
         <li class="method-source">
-            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.198">, line 198</a>
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.231">, line 231</a>
         </li>
     </ul>
 
@@ -2001,9 +2056,16 @@ based on file extension and/or contents.</p>
 
 
 
-    <h4 class="method-heading">Example</h4>
+    <h4 class="method-heading">Examples</h4>
     
     <pre><code class="language-js">lift.uploadFile('local-file.png', 'folder/image.png')</code></pre>
+
+        <p class="code-caption">Example reponse</p>
+    
+    <pre><code class="language-js">{
+  url: 'https://myaccount.blob.core.windows.net/default/hello-2020-03-22.txt',
+  serverReponse: {…}
+}</code></pre>
 
 
 
@@ -2021,7 +2083,7 @@ based on file extension and/or contents.</p>
     <h4 class="method-heading">Source</h4>
     <ul>
         <li class="method-source">
-            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.233">, line 233</a>
+            <a href="blocklift.js.html">blocklift.js</a><a href="blocklift.js.html#source.271">, line 271</a>
         </li>
     </ul>
 
@@ -2047,7 +2109,7 @@ based on file extension and/or contents.</p>
 
 <footer class="layout-footer">
   <div class="container">
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Mar 25 2020 13:30:45 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Mar 25 2020 20:35:19 GMT+0100 (Central European Standard Time)
   </div>
 </footer>
 

@@ -108,24 +108,51 @@
 <a href="https://codeclimate.com/github/julie-ng/blocklift-js/maintainability"><img src="https://api.codeclimate.com/v1/badges/4b5bf0e191de7c6c74c8/maintainability" alt="Maintainability"></a></p>
 <h2>Developer Friendly API</h2>
 <p>For a simple blob operation, the official <a href="https://github.com/Azure/azure-sdk-for-js/tree/master/sdk/storage/storage-blob">@azure/storage-blob</a> SDK requires 3 &quot;clients&quot; for the blob service, the container and the blob itself. Blocklift.js abstracts away the complexity to provide a better developer experience.</p>
-<p>Note: <code>UPPERCASE</code> represents environment variables</p>
-<pre class="prettyprint source lang-javascript"><code>const Blocklift = require('./blocklift')
+<p>This is a complete example to upload a file in just a few lines:</p>
+<pre class="prettyprint source lang-javascript"><code>const Blocklift = require('blocklift')
 
 const lift = new Blocklift({
-	account: ACCOUNT_NAME,
-	accessKey: ACCESS_KEY,
-	defaultContainer: 'dev' // must already exist
+	account: 'accountname',
+	accessKey: 'key',
+	defaultContainer: 'dev' // optional
 })
-			
+
 lift.upload('hello.txt', 'Hello World')
 	.then((upload) => { console.log(upload.url) })
 	.catch((err) => { … })
 </code></pre>
-<h3>Feature: Automatically get Blob URLs</h3>
+<p>You can also use the <code>async/await</code> syntax:</p>
+<pre class="prettyprint source lang-javascript"><code>async function main () {
+	const blob =  await lift.upload('hello.txt', 'Hello World')
+	console.log(blob.url)
+}
+main()
+</code></pre>
+<h3>Easier than the official SDK</h3>
+<p>Unfortunately the official <a href="https://github.com/Azure/azure-sdk-for-js/tree/master/sdk/storage/storage-blob">@azure/storage-blob</a> SDK is cumbersome to use.</p>
+<p>Compare the above with this <a href="https://github.com/Azure/azure-sdk-for-js/tree/master/sdk/storage/storage-blob#create-a-blob-by-uploading-data-to">official example</a>, which has been slightly simplified for fairer comparison:</p>
+<pre class="prettyprint source lang-javascript"><code>const { DefaultAzureCredential } = require(&quot;@azure/identity&quot;);
+const { BlobServiceClient } = require(&quot;@azure/storage-blob&quot;);
+const defaultAzureCredential = new DefaultAzureCredential();
+const account = ACCOUNT_NAME;
+
+const blobServiceClient = new BlobServiceClient(
+  `https://${ACCOUNT_NAME}.blob.core.windows.net`,
+  defaultAzureCredential
+);
+
+const content = &quot;Hello world!&quot;;
+const containerClient = blobServiceClient.getContainerClient('dev');
+const blockBlobClient = containerClient.getBlockBlobClient('hello.txt');
+blockBlobClient.upload(content, content.length)
+	.then((response) => { … })
+	.catch((err) => { … })
+</code></pre>
+<h3>Automatically get Blob URLs</h3>
 <p>In addition to standard Blob REST API response, blocklift.js also returns a <code>url</code> property for you, for example:</p>
 <pre class="prettyprint source"><code>https://accountname.blob.core.windows.net/dev/hello.txt
 </code></pre>
-<h3>Feature: Set a default container</h3>
+<h3>Set a default container</h3>
 <p>Why repeatedly pass a container parameter or client, when you can just set a default once and then forget about it?</p>
 <pre class="prettyprint source lang-javascript"><code>const lift = new Blocklift({
 	account: ACCOUNT_NAME,
@@ -134,10 +161,10 @@ lift.upload('hello.txt', 'Hello World')
 })
 </code></pre>
 <p>Of course, you can always choose to use a different container and pass an <em>optional</em> <code>container</code> parameter in individual operations:</p>
-<pre class="prettyprint source lang-javascript"><code>// optional container param
-lift.upload('hello.txt', 'Hello World', { conatiner: 'not-default' })
+<pre class="prettyprint source lang-javascript"><code>const options = { conatiner: 'not-default' }
+lift.upload('hello.txt', 'Hello World', options)
 </code></pre>
-<h3>Feature: Automatic <code>Content-Type</code> detection</h3>
+<h3>Automatic <code>Content-Type</code> detection</h3>
 <p>Blocklift.js automatically sets a <code>Content-Type</code> based on file contents or filename. This helps browsers identify file types and decide how to handle them. You want to show users content as quickly as possible, i.e. in browser and not have them dig through their Downloads folder.</p>
 <table>
 <thead>
@@ -162,26 +189,50 @@ lift.upload('hello.txt', 'Hello World', { conatiner: 'not-default' })
 </tbody>
 </table>
 <p>Of course other file types are supported including PDFs, Microsoft Word, Powerpoint, Videos, and more. See <a href="https://www.npmjs.com/package/file-type#supported-file-types">file-type</a> package for detailed list.</p>
-<h3>Official SDK Example</h3>
-<p>Unfortunately the official <a href="https://github.com/Azure/azure-sdk-for-js/tree/master/sdk/storage/storage-blob">@azure/storage-blob</a> SDK is cumbersome to use.</p>
-<p>Compare the above with this <a href="https://github.com/Azure/azure-sdk-for-js/tree/master/sdk/storage/storage-blob#create-a-blob-by-uploading-data-to">official example</a>, which has been slightly simplified for fairer comparison:</p>
-<pre class="prettyprint source lang-javascript"><code>const { DefaultAzureCredential } = require(&quot;@azure/identity&quot;);
-const { BlobServiceClient } = require(&quot;@azure/storage-blob&quot;);
-const defaultAzureCredential = new DefaultAzureCredential();
-const account = ACCOUNT_NAME;
-
-const blobServiceClient = new BlobServiceClient(
-  `https://${ACCOUNT_NAME}.blob.core.windows.net`,
-  defaultAzureCredential
-);
-
-const content = &quot;Hello world!&quot;;
-const containerClient = blobServiceClient.getContainerClient('dev');
-const blockBlobClient = containerClient.getBlockBlobClient('hello.txt');
-blockBlobClient.upload(content, content.length)
-	.then((response) => { … })
-	.catch((err) => { … })
-</code></pre></article>
+<h2>Examples</h2>
+<p>Everything is a <code>Promise</code>. For a better overview, the <code>then()</code>, <code>catch()</code>, <code>async</code>, and <code>await</code> have been left out.</p>
+<p>For full details, see <a href="https://julie-ng.github.io/blocklift-js/">the API documentation →</a></p>
+<h3>Containers</h3>
+<pre class="prettyprint source lang-javascript"><code>lift.listContainers()
+lift.createContainer('name')
+lift.deleteContainer('name')
+</code></pre>
+<h3>Blobs</h3>
+<pre class="prettyprint source lang-javascript"><code>lift.listBlobs('container')
+lift.getBlobUrl('my-image.png')
+</code></pre>
+<p>Upload a Blob or Create a File</p>
+<pre class="prettyprint source lang-javascript"><code>lift.upload('hello.txt', 'Hello World', { contentType: 'text/plain' })
+lift.uploadFile('local-file.png', 'folder/image.png')
+</code></pre>
+<p>Delete a Blob</p>
+<pre class="prettyprint source lang-javascript"><code>lift.deleteBlob('folder/image.png')
+lift.deleteBlob('folder/image.png', { container: 'not-default' })
+</code></pre>
+<h3>Responses</h3>
+<p>Blocklift.js uses the official SDK under the hood and will bubble up the responses.</p>
+<p>For example, <code>url</code> is added by blocklift and <code>serverResponse</code> is the unaltered response from the SDK.</p>
+<pre class="prettyprint source"><code>{
+  url: 'https://myaccount.blob.core.windows.net/default/hello-2020-03-22.txt',
+  serverReponse: {
+    etag: '&quot;0x8D7CE6FCC47FC45&quot;',
+    lastModified: 2020-03-22T14:46:26.000Z,
+    contentMD5: &lt;Buffer c4 85 73 58 38 b0 05 75 7f 3f 31 99 50 0c 0e ca>,
+    clientRequestId: 'd749b9a2-5fba-489d-a230-ba5df662f4f0',
+    requestId: '283595f3-a01e-0009-1b58-00e0fc000000',
+    version: '2019-02-02',
+    date: 2020-03-22T14:46:25.000Z,
+    isServerEncrypted: true,
+    encryptionKeySha256: undefined,
+    errorCode: undefined,
+    'content-length': '0',
+    server: 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0',
+    'x-ms-content-crc64': 'awyymjQimGI=',
+    body: undefined
+  }
+}
+</code></pre>
+<p>For more examples, see <a href="https://julie-ng.github.io/blocklift-js/Blocklift.html">the API documentation →</a></p></article>
     </section>
 
 
@@ -194,7 +245,7 @@ blockBlobClient.upload(content, content.length)
 
 <footer class="layout-footer">
   <div class="container">
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Mar 25 2020 13:30:45 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Mar 25 2020 20:35:19 GMT+0100 (Central European Standard Time)
   </div>
 </footer>
 
