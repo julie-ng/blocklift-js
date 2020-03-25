@@ -1,6 +1,6 @@
 {
-  "name": "blocklist-js",
-  "version": "0.1.0",
+  "name": "blocklift",
+  "version": "0.0.0",
   "author": "Julie Ng",
   "description": "A dead simple and developer friendly JavaScript library for handling object storage on Azure",
   "keywords": [
@@ -11,7 +11,10 @@
     "uploads"
   ],
   "main": "source/blocklift.js",
-  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/julie-ng/blocklift-js"
+  },
   "scripts": {
     "dev": "nodemon -w source/ -w dev.js --exec 'node dev.js'",
     "docs": "jsdoc --readme ./README.md -c jsdoc.json",
