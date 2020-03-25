@@ -30,7 +30,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "lint:watch": "nodemon -w source --exec 'npm run lint'",
-    "preflight": "npm run lint && npm run test:unit && NODE_ENV=development npm run test:integration && npm audit"
+    "preflight": "npm run lint && npm run test:unit && NODE_ENV=development npm run test:integration && npm audit",
+    "release": "standard-version --sign"
   },
   "license": "MIT",
   "dependencies": {
@@ -48,6 +49,7 @@
     "jsdoc": "^3.6.3",
     "live-server": "^1.2.1",
     "nodemon": "^2.0.2",
+    "standard-version": "^7.1.0",
     "tidy-jsdoc": "^1.4.0"
   }
 }
