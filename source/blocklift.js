@@ -154,6 +154,19 @@ class Blocklift {
 	 * @example
 	 * lift.listContainers()
 	 *
+	 * @example <caption>Example Response</caption>
+   * [
+   *   {
+   *     name: 'container-1',
+   *     properties: {…},
+   *     metadata: undefined
+   *   },
+   *   {
+   *     name: 'container-2',
+   *     properties: {…},
+   *     metadata: undefined
+   *   }
+   * ]
 	 */
 	listContainers () {
 		return this.sdk.listContainers()
@@ -194,6 +207,26 @@ class Blocklift {
 	 * @example
 	 * lift.upload('hello.txt', 'Hello World', { contentType: 'text/plain' })
 	 *
+	 * @example <caption>Example reponse</caption>
+	 * {
+   *   url: 'https://myaccount.blob.core.windows.net/default/hello-2020-03-22.txt',
+   *   serverReponse: {
+   *     etag: '"0x8D7CE6FCC47FC45"',
+   *     lastModified: 2020-03-22T14:46:26.000Z,
+   *     contentMD5: <Buffer c4 85 73 58 38 b0 05 75 7f 3f 31 99 50 0c 0e ca>,
+   *     clientRequestId: 'd749b9a2-5fba-489d-a230-ba5df662f4f0',
+   *     requestId: '283595f3-a01e-0009-1b58-00e0fc000000',
+   *     version: '2019-02-02',
+   *     date: 2020-03-22T14:46:25.000Z,
+   *     isServerEncrypted: true,
+   *     encryptionKeySha256: undefined,
+   *     errorCode: undefined,
+   *     'content-length': '0',
+   *     server: 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0',
+   *     'x-ms-content-crc64': 'awyymjQimGI=',
+   *     body: undefined
+   *   }
+   * }
 	 */
 	async upload (pathname, content, opts = {}) {
 		if (!pathname) {
@@ -229,6 +262,11 @@ class Blocklift {
 	 * @example
 	 * lift.uploadFile('local-file.png', 'folder/image.png')
 	 *
+	 * @example <caption>Example reponse</caption>
+	 * {
+   *   url: 'https://myaccount.blob.core.windows.net/default/hello-2020-03-22.txt',
+   *   serverReponse: {…}
+   * }
 	 */
 	async uploadFile (sourcePath, blobPath, opts = {}) {
 		const container = opts.container || this.defaultContainer
@@ -266,6 +304,22 @@ class Blocklift {
 	 * lift.deleteBlob('folder/image.png') // uses default container
 	 * lift.deleteBlob('folder/image.png', { container: 'my-container' })
 	 *
+	 * @example <caption>Example Response</caption>
+	 * {
+   *   name: 'container-2020-03-22-1519-a7uotq',
+   *   operation: 'delete',
+   *   message: 'Successfully deleted container container-2020-03-22-1519-a7uotq',
+   *   serverResponse: {
+   *     clientRequestId: '0cf51581-ebbe-4b4c-aaca-4d31bbad1b58',
+   *     requestId: '0a6759b4-a01e-0054-0154-00ea78000000',
+   *     version: '2019-02-02',
+   *     date: 2020-03-22T14:19:55.000Z,
+   *     errorCode: undefined,
+   *     'content-length': '0',
+   *     server: 'Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0',
+   *     body: undefined
+   *   }
+   * }
 	 */
 	async deleteBlob (pathname, opts = {}) {
 		const params = {
