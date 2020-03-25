@@ -1,0 +1,6 @@
+exclude_patterns:
+- 'coverage/'
+- 'dist/'
+- 'docs/'
+- '**/node_modules/'
+- '**/*.spec.js'
