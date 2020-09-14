@@ -50,6 +50,7 @@
     "live-server": "^1.2.1",
     "nodemon": "^2.0.2",
     "standard-version": "^9.0.0",
-    "tidy-jsdoc": "^1.4.0"
+    "tidy-jsdoc": "^1.4.0",
+    "websocket-extensions": ">=0.1.4"
   }
 }
